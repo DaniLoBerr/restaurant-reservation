@@ -1,23 +1,3 @@
-# Getting Started
-"""
-- What will your software do? What features will it have? How will it be executed?
-    - Aplicación de terminal
-    - Mensaje de bienvenida
-    - Preguntar por fecha de la reserva y personas (incluir el formato, incluir posibilidad de cancelación)
-        - Si está escrito en otro formato, repreguntar
-        - Si está completo ese día y/o ese hora, repreguntar
-    - Mensaje de:
-        - Cancelación si decide cancelar.
-        - Reserva completada si se ha completado.
-            - Guardar en un archivo json los datos de todas las reservas
-            - Exportar un pdf con la confirmación, la fecha y la hora de la reserva.
-- What new skills will you need to acquire? What topics will you need to research?
-    - Librería date
-    - Clases
-    - try-catch
-    - i/o
-    - pytest
-"""
 class Reservation:
     """
     A class representing a reservation.
@@ -26,7 +6,7 @@ class Reservation:
         name (str): The name of the person making the reservation.
         date (...): The date of the reservation.
         time (...): The time of the reservation.
-        people (int): The number of people who will attend
+        people (int): The number of people who will attend.
     """
 
     def __init__(self, name, date, time, people):
@@ -37,7 +17,7 @@ class Reservation:
             name (str): The name of the person making the reservation.
             date (...): The date of the reservation.
             time (...): The time of the reservation.
-            people (int): The number of people who will attend
+            people (int): The number of people who will attend.
         """
         self.name = name
         self.date = date
@@ -52,7 +32,22 @@ class Reservation:
             ...
         """
         ...
-    
+
+    @classmethod
+    def reserve(cls):
+        """
+        Creates a Reservation instance with the name for the reservation, a date,
+        a time and the people attending entered by the user.
+
+        Returns:
+            Reservation: an instance of Reservation
+        """
+        name = input("In whose name do you want to make the reservation? (type first and last name): ")
+        date = input("What day would you like to make a reservation? (dd/mm/yyyy): ")
+        time = input("What time? (hh:mm, 24h format): ")
+        people = input("How many people will the reservation be for? (type a number): ")
+        return cls(name, date, time, people)
+
     @property
     def name(self):
         ...
@@ -60,7 +55,7 @@ class Reservation:
     @name.setter
     def name(self):
         ...
-    
+
     @property
     def date(self):
         ...
