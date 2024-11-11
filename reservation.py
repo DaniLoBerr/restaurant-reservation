@@ -147,10 +147,6 @@ class Reservation:
                 - If the day, month or year values are not correct.
             TypeError: If the user enters a value other than numbers.
         """
-        MINDAY = 0
-        MAXDAY = 31
-        MINMONTH = 0
-        MAXMONTH = 12
         current_date = datetime.date.today()
         reserve_date = search(r"^(\d{1,2})\/(\d{1,2})\/(\d{4})$", date)
 
@@ -158,20 +154,10 @@ class Reservation:
         month = int(reserve_date.group(2))
         year = int(reserve_date.group(3))
 
-        if (
-            day < MINDAY or
-            day > MAXDAY or
-            month < MINMONTH or
-            month > MAXMONTH or
-            year < datetime.MINYEAR or
-            year > datetime.MAXYEAR
-        ): 
-            raise ValueError
-
         cleaned_date = datetime.date(year, month, day)
 
         if (cleaned_date < current_date):
-            raise ValueError
+            raise ValueError("The date entered has already passed")
         else:
             return cleaned_date
 
