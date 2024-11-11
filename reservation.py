@@ -38,7 +38,12 @@ class Reservation:
         Returns:
             String: a string with the information of a Reservation instance.
         """
-        return f"Reservation for {self.people} people in the name of {self.name} for the {self.date} at {self.time}h."
+        return (
+            f"Reservation for {self.people} people " +  
+            f"in the name of {self.name} " + 
+            f"for {self.date.strftime("%A, %d %B, %Y")} " +  
+            f"at {self.time.strftime("%I%p")}."
+        )
 
     @classmethod
     def reserve(cls) -> Reservation:
@@ -64,39 +69,111 @@ class Reservation:
     @property
     def name(self) -> str:
         """
-        Get the name of the reservation.
+        Gets the name of the reservation.
 
         Returns:
-            String: A string of the name attribute of the instance of Reservation.
+            String: A string of the name attribute of the Reservation instance.
         """
         return self._name
 
     @name.setter
     def name(self, name: str) -> None:
         """
-        Set the name attribute value of the reservation.
+        Sets the name attribute value of the reservation.
         """
         while True:
             try:
                 cleaned_name: str = self.clean_name(name)
                 break
             except ValueError:
-                name: str = input("Invalid name. Please, re-enter your name: ")
+                name: str = input("Invalid name. Please, re-enter your name (first and last): ")
                 continue
         self._name = cleaned_name
 
     @staticmethod
     def clean_name(name: str) -> str:
+        """
+        Validates and cleans a name introduced by a user.
+
+        Parameters:
+            name (str): A string in the form of "first-name last-name".
+        Returns:
+            String: A string in the form of "First-name Last-name".
+        Raises:
+            ValueError: If name isn't in the correct format.
+        """
         if matches := search(r"^([a-z]{1,20}) ([a-z]{1,20})$", name, IGNORECASE):
             return f"{matches.group(1).title()} {matches.group(2).title()}"
         else:
             raise ValueError("Name not valid")
 
     @property
-    def date(self): ...
+    def date(self) -> datetime.date:
+        """
+        Gets the date of the reservation.
+
+        Returns:
+            datetime.Date: A date object of the date attribute of the Reservation instance.
+        """
+        return self._date
 
     @date.setter
-    def date(self): ...
+    def date(self, date: str) -> None:
+        """
+        Sets the date attribute value of the reservation.
+        """
+        while True:
+            try:
+                cleaned_date: datetime.date = self.clean_date(date)
+                break
+            except (ValueError, TypeError):
+                date: str = input("Invalid date. Please, re-enter the date (dd/mm/yyyy): ")
+                continue
+        self._date = cleaned_date
+
+    @staticmethod
+    def clean_date(date: str) -> datetime.date:
+        """
+        Cleans and converts a date introduced by a user into a datetime object.
+
+        Parameters:
+            date (str): a string date in the form of "dd/mm/yyy".
+        Returns:
+            datetime.date: A date object.
+        Raises:
+            ValueError:
+                - If date isn't in the correct format.
+                - If the date entered by the user is before the current date.
+                - If the day, month or year values are not correct.
+            TypeError: If the user enters a value other than numbers.
+        """
+        MINDAY = 0
+        MAXDAY = 31
+        MINMONTH = 0
+        MAXMONTH = 12
+        current_date = datetime.date.today()
+        reserve_date = search(r"^(\d{1,2})\/(\d{1,2})\/(\d{4})$", date)
+
+        day = int(reserve_date.group(1))
+        month = int(reserve_date.group(2))
+        year = int(reserve_date.group(3))
+
+        if (
+            day < MINDAY or
+            day > MAXDAY or
+            month < MINMONTH or
+            month > MAXMONTH or
+            year < datetime.MINYEAR or
+            year > datetime.MAXYEAR
+        ): 
+            raise ValueError
+
+        cleaned_date = datetime.date(year, month, day)
+
+        if (cleaned_date < current_date):
+            raise ValueError
+        else:
+            return cleaned_date
 
     @property
     def time(self): ...
