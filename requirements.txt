@@ -1,1 +1,1 @@
-# Any pip-installable libraries that your project requires must be listed here.
+fpdf2==2.8.1

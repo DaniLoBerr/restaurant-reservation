@@ -1,6 +1,7 @@
 from __future__ import annotations
 from re import search, IGNORECASE
 from datetime import datetime
+from fpdf import FPDF, enums
 
 
 class Reservation:
@@ -187,11 +188,44 @@ class Reservation:
                 continue
         self._people = cleaned_people
 
-    def delete(self): ...
+    def confirmation(self):
+        # Reservation reminder document object
+        pdf = FPDF()
+
+        # Reservation reminder document title
+        pdf.add_page()
+        pdf.set_font("helvetica", "B", 24)
+        pdf.cell(
+            w = 0,
+            h = 20,
+            text="Reservation confirmed!",
+            border = "B",
+            align = "C",
+            new_x = enums.XPos.LMARGIN,
+            new_y = enums.YPos.NEXT
+        )
+
+        # Print a blank line
+        pdf.cell(0, 10, "", new_x = enums.XPos.LMARGIN, new_y = enums.YPos.NEXT)
+
+        # Reservation reminder document body
+        pdf.set_font("helvetica", "", 14)
+        pdf.multi_cell(
+            w = 100,
+            h = 5,
+            text = self.__str__(),
+            center = True,
+            align = "C"
+        )
+
+        # Export document
+        pdf.output("reservation.pdf")
+
+        print("Reservation confirmed! You will shortly receive a reminder document with the appointment details. ")
+
+    def cancel(self): ...
 
     def update(self): ...
-
-    def confirmation(self): ...
 
 
 def main(): ...
