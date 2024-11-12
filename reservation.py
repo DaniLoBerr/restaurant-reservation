@@ -139,7 +139,7 @@ class Reservation:
         Parameters:
             date_time (str): a string date and time in the form of "dd/mm/yyy hh:mm".
         Returns:
-            Datetime: A datetime object.
+            Datetime: A datetime object that includes the date and time of the reservation.
         Raises:
             ValueError:
                 - If the date and/or time entered by the user is before the current date or time.
@@ -164,10 +164,28 @@ class Reservation:
             return cleaned_datetime
 
     @property
-    def people(self): ...
+    def people(self) -> int:
+        """
+        Gets the number of people who will attend the reservation.
+
+        Returns:
+            Integer: An int for the number of people who will attend the reservation.
+        """
+        return self._people
 
     @people.setter
-    def people(self): ...
+    def people(self, people: str) -> None:
+        """
+        Sets the people attribute value of the reservation.
+        """
+        while True:
+            try:
+                cleaned_people: int = int(people)
+                break
+            except ValueError:
+                people: str = input("Invalid number. Please, re-enter the number of people (type a numeric number): ")
+                continue
+        self._people = cleaned_people
 
     def delete(self): ...
 
