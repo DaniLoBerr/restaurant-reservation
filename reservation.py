@@ -1,7 +1,6 @@
-import datetime
-
 from __future__ import annotations
 from re import search, IGNORECASE
+from datetime import datetime
 
 
 class Reservation:
@@ -10,24 +9,21 @@ class Reservation:
 
     Attributtes:
         name (str): The name of the person making the reservation.
-        date (datetime.date): The date of the reservation.
-        time (datetime.time): The time of the reservation.
+        date_time (datetime): The date and the time of the reservation.
         people (int): The number of people who will attend.
     """
 
-    def __init__(self, name: str, date: str, time: str, people: str) -> None:
+    def __init__(self, name: str, date_time: str, people: str) -> None:
         """
         Initializes a Reservation object.
 
         Parameters:
             name (str): The name of the person making the reservation.
-            date (str): The date of the reservation.
-            time (str): The time of the reservation.
+            date_time (str): The date and the time of the reservation.
             people (str): The number of people who will attend.
         """
         self.name: str = name
-        self.date: datetime.date = date
-        self.time: datetime.time = time
+        self.date_time: datetime = date_time
         self.people: int = people
 
     def __str__(self) -> str:
@@ -41,8 +37,8 @@ class Reservation:
         return (
             f"Reservation for {self.people} people " +  
             f"in the name of {self.name} " + 
-            f"for {self.date.strftime("%A, %d %B, %Y")} " +  
-            f"at {self.time.strftime("%I%p")}."
+            f"for {self.date_time.strftime("%A, %d %B, %Y")} " +  
+            f"at {self.date_time.strftime("%I%p")}."
         )
 
     @classmethod
@@ -64,7 +60,7 @@ class Reservation:
         people: str = input(
             "How many people will the reservation be for? (type a number): "
         )
-        return cls(name, date, time, people)
+        return cls(name, f"{date} {time}", people)
 
     @property
     def name(self) -> str:
@@ -108,64 +104,64 @@ class Reservation:
             raise ValueError("Name not valid")
 
     @property
-    def date(self) -> datetime.date:
+    def date_time(self) -> datetime:
         """
-        Gets the date of the reservation.
+        Gets the date and the time of the reservation.
 
         Returns:
-            datetime.Date: A date object of the date attribute of the Reservation instance.
+            Datetime: A datetime object of the date and time attribute of the Reservation instance.
         """
-        return self._date
+        return self._date_time
 
-    @date.setter
-    def date(self, date: str) -> None:
+    @date_time.setter
+    def date_time(self, date_time: str) -> None:
         """
-        Sets the date attribute value of the reservation.
+        Sets the date and time attribute value of the reservation.
         """
         while True:
             try:
-                cleaned_date: datetime.date = self.clean_date(date)
+                cleaned_datetime: datetime = self.clean_datetime(date_time)
                 break
-            except (ValueError, TypeError):
-                date: str = input("Invalid date. Please, re-enter the date (dd/mm/yyyy): ")
+            except (ValueError, TypeError, AttributeError):
+                date_time: str = input(
+                    "Invalid date and/or time. Please, re-enter the date (dd/mm/yyyy): "
+                ) + " " + input(
+                    "re-enter the time (hh:mm, 24h format): "
+                )
                 continue
-        self._date = cleaned_date
+        self._date_time = cleaned_datetime
 
     @staticmethod
-    def clean_date(date: str) -> datetime.date:
+    def clean_datetime(date_time: str) -> datetime:
         """
-        Cleans and converts a date introduced by a user into a datetime object.
+        Cleans and converts a date and a time introduced by a user into a datetime object.
 
         Parameters:
-            date (str): a string date in the form of "dd/mm/yyy".
+            date_time (str): a string date and time in the form of "dd/mm/yyy hh:mm".
         Returns:
-            datetime.date: A date object.
+            Datetime: A datetime object.
         Raises:
             ValueError:
-                - If date isn't in the correct format.
-                - If the date entered by the user is before the current date.
-                - If the day, month or year values are not correct.
+                - If the date and/or time entered by the user is before the current date or time.
+                - If the day, month, year, hour or minute values are not correct.
+            AttributeError: If date and/or time aren't in the correct format.
             TypeError: If the user enters a value other than numbers.
         """
-        current_date = datetime.date.today()
-        reserve_date = search(r"^(\d{1,2})\/(\d{1,2})\/(\d{4})$", date)
+        current_datetime = datetime.today()
+        reserve_datetime = search(r"^(\d{1,2})\/(\d{1,2})\/(\d{4}) (\d{1,2}):(\d{1,2})$", date_time)
 
-        day = int(reserve_date.group(1))
-        month = int(reserve_date.group(2))
-        year = int(reserve_date.group(3))
+        day = int(reserve_datetime.group(1))
+        month = int(reserve_datetime.group(2))
+        year = int(reserve_datetime.group(3))
+        hours = int(reserve_datetime.group(4))
+        minutes = int(reserve_datetime.group(5))
 
-        cleaned_date = datetime.date(year, month, day)
+        cleaned_datetime = datetime(year, month, day, hours, minutes)
 
-        if (cleaned_date < current_date):
+        if (cleaned_datetime < current_datetime):
             raise ValueError("The date entered has already passed")
         else:
-            return cleaned_date
-
-    @property
-    def time(self): ...
-
-    @time.setter
-    def time(self): ...
+            return cleaned_datetime
 
     @property
     def people(self): ...
