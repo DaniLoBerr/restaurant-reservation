@@ -189,9 +189,12 @@ class Reservation:
                 continue
         self._people = cleaned_people
 
-    def create_reservation(self) -> None:
+    def create_reservation(self) -> str:
         """
-        Add a new reservation in a reservation_database.json document
+        Adds a new reservation in a reservation_database.json document.
+
+        Returns:
+            String: A string messsage with the confirmation of the reservation.
         """
         # Open database.json file and load it as a dict object
         with open("reservation_database.json", "r") as database:
@@ -219,6 +222,8 @@ class Reservation:
         # Export confirmation document
         self.create_confirmation_document()
 
+        return "Reservation confirmed! You will shortly receive a reminder document with the appointment details."
+
     def read_reservation(): ...
 
     def update_reservation(): ...
@@ -227,7 +232,7 @@ class Reservation:
         # Reset the reservation "id"s in the database in case there has been any modification in the database.
         ...
 
-    def create_confirmation_document(self):
+    def create_confirmation_document(self) -> None:
         # Reservation reminder document object
         pdf = FPDF()
         # Reservation reminder document title
@@ -255,8 +260,6 @@ class Reservation:
         )
         # Export document
         pdf.output("reservation.pdf")
-
-        print("Reservation confirmed! You will shortly receive a reminder document with the appointment details. ")
 
 
 def main(): ...
