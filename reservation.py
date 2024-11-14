@@ -2,6 +2,7 @@ from __future__ import annotations
 from re import search, IGNORECASE
 from datetime import datetime
 from fpdf import FPDF, enums
+from json import dumps, load
 
 
 class Reservation:
@@ -188,26 +189,61 @@ class Reservation:
                 continue
         self._people = cleaned_people
 
-    def confirmation(self):
+    def create_reservation(self) -> None:
+        """
+        Add a new reservation in a reservation_database.json document
+        """
+        # Open database.json file and load it as a dict object
+        with open("reservation_database.json", "r") as database:
+            database_dict: dict = load(database)
+        # Extract a list of the reservation dicts only 
+        database_reservations = list(database_dict.values())
+        # Add the new reservation to it
+        database_reservations.append({
+            "name": self.name,
+            "date_time": f"{self.date_time}",
+            "people": self.people
+        })
+        # Sort the reservations list by date
+        sorted_database_reservations = sorted(
+            database_reservations,
+            key = lambda item : item["date_time"]
+        )
+        # Create a new dictionary with the numbered reservations
+        new_database_dict = {}
+        for i, reservation in enumerate(sorted_database_reservations):
+            new_database_dict[f"{i + 1}"] = reservation
+        # Open database and overwrite it with a new database dict
+        with open("reservation_database.json", "w") as database:
+            database.write(dumps(new_database_dict, indent=4))
+        # Export confirmation document
+        self.create_confirmation_document()
+
+    def read_reservation(): ...
+
+    def update_reservation(): ...
+
+    def delete_reservation():
+        # Reset the reservation "id"s in the database in case there has been any modification in the database.
+        ...
+
+    def create_confirmation_document(self):
         # Reservation reminder document object
         pdf = FPDF()
-
         # Reservation reminder document title
         pdf.add_page()
         pdf.set_font("helvetica", "B", 24)
         pdf.cell(
             w = 0,
             h = 20,
-            text="Reservation confirmed!",
+            text = "Reservation confirmed!",
             border = "B",
             align = "C",
             new_x = enums.XPos.LMARGIN,
             new_y = enums.YPos.NEXT
         )
-
-        # Print a blank line
+        # Blank line
         pdf.cell(0, 10, "", new_x = enums.XPos.LMARGIN, new_y = enums.YPos.NEXT)
-
         # Reservation reminder document body
         pdf.set_font("helvetica", "", 14)
         pdf.multi_cell(
@@ -217,15 +253,10 @@ class Reservation:
             center = True,
             align = "C"
         )
-
         # Export document
         pdf.output("reservation.pdf")
 
         print("Reservation confirmed! You will shortly receive a reminder document with the appointment details. ")
-
-    def cancel(self): ...
-
-    def update(self): ...
 
 
 def main(): ...
