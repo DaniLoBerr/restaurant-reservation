@@ -224,7 +224,37 @@ class Reservation:
 
         return "Reservation confirmed! You will shortly receive a reminder document with the appointment details."
 
-    def read_reservation(): ...
+    @staticmethod
+    def read_reservation(name) -> str:
+        """
+        Gets the information of a reservation/s from the database.
+
+        Parameters:
+            name (str): A name entered by the user to check the database for reservations.
+        Returns:
+            String: A string with the information of a reservation/s or a no reservations message.
+        """
+        # Open database.json file and load it as a dict object
+        with open("reservation_database.json", "r") as database:
+            database_dict: dict = load(database)
+        # Extract a list of the reservation dicts only
+        database_reservations = list(database_dict.values())
+        # Define the variable to be returned
+        matching_reservations = ""
+        # Check reservations based on the argument “name” and return the info
+        for reservation in database_reservations:
+            if reservation["name"] == name:
+                matching_reservations += (
+                    f"{reservation["name"]} has a reservation on " + 
+                    f"{reservation["date_time"][:10]} at " + # To "space" char
+                    f"{reservation["date_time"][11:16]} for " + # From "space" char to minutes
+                    f"{reservation["people"]} people.\n"
+                )
+        if matching_reservations:
+            return matching_reservations[:len(matching_reservations) - 1] # Remove the last line break 
+        else:
+            return "The reservation could not be found. Please check the name entered."
+
 
     def update_reservation(): ...
 
