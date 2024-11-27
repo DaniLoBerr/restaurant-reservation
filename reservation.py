@@ -1,8 +1,11 @@
+# Standard imports
 from __future__ import annotations
 from re import search, IGNORECASE
 from datetime import datetime, date, time
-from fpdf import FPDF, enums
 from json import dumps, load
+
+# Third-party imports
+from fpdf import FPDF, enums
 
 
 class Reservation:
