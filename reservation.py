@@ -22,9 +22,9 @@ class Reservation:
     :type people: int
     """
     # Class variables
-    restaurant_tables = 4
-    tables_capacity = 4
-    restaurant_capacity = 16
+    restaurant_tables: int = 4
+    tables_capacity: int = 4
+    restaurant_capacity: int = 16
 
     # Special methods
     def __init__(
