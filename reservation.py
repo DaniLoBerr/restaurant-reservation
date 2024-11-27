@@ -591,7 +591,7 @@ class Reservation:
 
 def main():
     """
-    Main function of the script whose puporse is to ask a user if he/she wants to
+    Main function of the script whose purpose is to ask a user if he/she wants to
     create, update, get data or delete a restaurant reservation and perfom the
     selected task.
     """
