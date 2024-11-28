@@ -30,8 +30,8 @@ class Reservation:
     def __init__(
             self,
             name: str,
-            rdate: str = "1-1-3000",
-            rtime: str = "12:00",
+            date: str = "1-1-3000",
+            time: str = "12:00",
             people: str = "0"
         ) -> None:
         """
@@ -46,10 +46,10 @@ class Reservation:
         :param people: The number of people who will attend.
         :type people: str
         """
-        self._name: str = name
-        self._rdate: date = rdate
-        self._rtime: time = rtime
-        self._people: int = people
+        self._rname: str = name
+        self._rdate: date = date
+        self._rtime: time = time
+        self._rpeople: int = people
 
     def __str__(self) -> str:
         """
@@ -59,8 +59,8 @@ class Reservation:
         :rtype: str
         """
         return (
-            f"Reservation for {self._people} people " +
-            f"in the name of {self._name} " +
+            f"Reservation for {self._rpeople} people " +
+            f"in the name of {self._rname} " +
             f"for {self._rdate.strftime("%A, %d %B, %Y")} " +
             f"at {self._rtime.strftime("%I %p")}."
         )
@@ -74,7 +74,7 @@ class Reservation:
         :return: The name of the person making the reservation.
         :rtype: str
         """
-        return self._name
+        return self._rname
 
     @_name.setter
     def _name(self, name: str) -> None:
@@ -91,10 +91,10 @@ class Reservation:
             except ValueError:
                 name: str = input("Invalid name. Please, re-enter your name (first and last): ")
                 continue
-        self._name = cleaned_name
+        self._rname = cleaned_name
 
     @property
-    def _rdate(self) -> date:
+    def _date(self) -> date:
         """
         Gets the date of the reservation.
 
@@ -103,8 +103,8 @@ class Reservation:
         """
         return self._rdate
 
-    @_rdate.setter
-    def _rdate(self, rdate: str) -> None:
+    @_date.setter
+    def _date(self, date: str) -> None:
         """
         Sets the date attribute value of the reservation.
 
@@ -113,15 +113,15 @@ class Reservation:
         """
         while True:
             try:
-                cleaned_rdate: date = self._clean_date(rdate)
+                cleaned_date: date = self._clean_date(date)
                 break
             except (ValueError, TypeError, AttributeError):
                 rdate: str = input("Invalid date . Please, re-enter the date (dd-mm-yyyy): ")
                 continue
-        self._rdate = cleaned_rdate
+        self._rdate = cleaned_date
 
     @property
-    def _rtime(self) -> time:
+    def _time(self) -> time:
         """
         Gets the time of the reservation.
 
@@ -130,8 +130,8 @@ class Reservation:
         """
         return self._rtime
 
-    @_rtime.setter
-    def _rtime(self, rtime: str) -> None:
+    @_time.setter
+    def _time(self, time: str) -> None:
         """
         Sets the time attribute value of the reservation.
 
@@ -140,12 +140,12 @@ class Reservation:
         """
         while True:
             try:
-                cleaned_rtime: time = self._clean_time(rtime)
+                cleaned_time: time = self._clean_time(time)
                 break
             except (ValueError, TypeError, AttributeError):
                 rtime: str = input("Invalid time . Please, re-enter the time (hh:mm, 24h format): ")
                 continue
-        self._rtime = cleaned_rtime
+        self._rtime = cleaned_time
 
     @property
     def _people(self) -> int:
@@ -155,7 +155,7 @@ class Reservation:
         :return: The number of people who will attend the reservation.
         :rtype: int
         """
-        return self._people
+        return self._rpeople
 
     @_people.setter
     def _people(self, people: str) -> None:
@@ -172,7 +172,7 @@ class Reservation:
             except ValueError:
                 people: str = input("Invalid number. Please, re-enter the number of people (type a numeric number between 1 and 16): ")
                 continue
-        self._people = cleaned_people
+        self._rpeople = cleaned_people
 
     # Validation methods
     @staticmethod
@@ -192,7 +192,7 @@ class Reservation:
             raise ValueError("Name not valid")
 
     @staticmethod
-    def _clean_date(rdate: str) -> date:
+    def _clean_date(date: str) -> date:
         """
         Cleans and converts a date introduced by a user into a date object.
 
@@ -207,7 +207,7 @@ class Reservation:
         :raises TypeError: If the user enters a value other than numbers.
         """
         current_date = date.today()
-        reservation_date = search(r"^(\d{1,2})-(\d{1,2})-(\d{4})$", rdate)
+        reservation_date = search(r"^(\d{1,2})-(\d{1,2})-(\d{4})$", date)
         cleaned_date = date(
             year = int(reservation_date.group(3)),
             month = int(reservation_date.group(2)),
@@ -218,7 +218,7 @@ class Reservation:
         else:
             return cleaned_date
 
-    def _clean_time(self, rtime: str) -> time:
+    def _clean_time(self, time: str) -> time:
         """
         Cleans and converts a time introduced by a user into a time object.
 
@@ -233,7 +233,7 @@ class Reservation:
         """
         current_date = datetime.today().date()
         current_time = datetime.today().time()
-        reservation_time = search(r"^(12|14|20|22):(00)$", rtime)
+        reservation_time = search(r"^(12|14|20|22):(00)$", time)
         cleaned_time = time(
             hour = int(reservation_time.group(1)),
             minute = int(reservation_time.group(2))
@@ -281,7 +281,7 @@ class Reservation:
         print(cls._get_time_constraints())
         reservation._rtime = cls._request_time()
         print(cls._get_people_constraints())
-        reservation._people = cls._request_people()
+        reservation._rpeople = cls._request_people()
         if not cls._check_reservation_availability(reservation):
             return "Sorry, we do not have availability for the data you have provided."
         # Update database and confirmation
@@ -407,7 +407,7 @@ class Reservation:
         """
         database_reservations = cls.__get_reservations_list()
         for database_reservation in database_reservations:
-            if database_reservation["name"] == user_reservation._name:
+            if database_reservation["name"] == user_reservation._rname:
                 return False
         return True
 
@@ -424,8 +424,8 @@ class Reservation:
         database_reservations = cls.__get_reservations_list()
         tables_available = cls._restaurant_tables
         for database_reservation in database_reservations:
-            if database_reservation["rdate"] == user_reservation._rdate.strftime("%Y-%m-%d"):
-                if database_reservation["rtime"] == user_reservation._rtime.strftime("%H:%M"):
+            if database_reservation["date"] == user_reservation._rdate.strftime("%Y-%m-%d"):
+                if database_reservation["time"] == user_reservation._rtime.strftime("%H:%M"):
                     # TODO: no hardcode
                     match database_reservation["people"]:
                         case 1 | 2 | 3 | 4:
@@ -438,8 +438,8 @@ class Reservation:
                             tables_available -= 4
         return False if (
             tables_available == 0 or
-            user_reservation._people / tables_available > cls._tables_capacity or
-            user_reservation._people / tables_available < 0
+            user_reservation._rpeople / tables_available > cls._tables_capacity or
+            user_reservation._rpeople / tables_available < 0
         ) else True
 
     # Contraints
@@ -557,15 +557,15 @@ class Reservation:
         database_reservations = cls.__get_reservations_list()
         # Add the new reservation to the list
         database_reservations.append(dict(
-            name = user_reservation._name,
-            rdate = user_reservation._rdate.strftime("%Y-%m-%d"),
-            rtime = user_reservation._rtime.strftime("%H:%M"),
-            people = user_reservation._people
+            name = user_reservation._rname,
+            date = user_reservation._rdate.strftime("%Y-%m-%d"),
+            time = user_reservation._rtime.strftime("%H:%M"),
+            people = user_reservation._rpeople
         ))
         # Sort the reservations list by date
         sorted_database_reservations = sorted(
             database_reservations,
-            key = lambda item : item["rdate"]
+            key = lambda item : item["date"]
         )
         # TODO: Sort by time also
         # Create a new dictionary with the numbered reservations
