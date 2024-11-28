@@ -22,9 +22,9 @@ class Reservation:
     :type people: int
     """
     # Class variables
-    restaurant_tables: int = 4
-    tables_capacity: int = 4
-    restaurant_capacity: int = 16
+    _restaurant_tables: int = 4
+    _tables_capacity: int = 4
+    _restaurant_capacity: int = 16
 
     # Special methods
     def __init__(
@@ -46,10 +46,10 @@ class Reservation:
         :param people: The number of people who will attend.
         :type people: str
         """
-        self.name: str = name
-        self.rdate: date = rdate
-        self.rtime: time = rtime
-        self.people: int = people
+        self._name: str = name
+        self._rdate: date = rdate
+        self._rtime: time = rtime
+        self._people: int = people
 
     def __str__(self) -> str:
         """
@@ -59,15 +59,15 @@ class Reservation:
         :rtype: str
         """
         return (
-            f"Reservation for {self.people} people " +
-            f"in the name of {self.name} " +
-            f"for {self.rdate.strftime("%A, %d %B, %Y")} " +
-            f"at {self.rtime.strftime("%I %p")}."
+            f"Reservation for {self._people} people " +
+            f"in the name of {self._name} " +
+            f"for {self._rdate.strftime("%A, %d %B, %Y")} " +
+            f"at {self._rtime.strftime("%I %p")}."
         )
 
     # Getters and Setters
     @property
-    def name(self) -> str:
+    def _name(self) -> str:
         """
         Gets the name of the reservation.
 
@@ -76,8 +76,8 @@ class Reservation:
         """
         return self._name
 
-    @name.setter
-    def name(self, name: str) -> None:
+    @_name.setter
+    def _name(self, name: str) -> None:
         """
         Sets the name attribute value of the reservation.
 
@@ -86,7 +86,7 @@ class Reservation:
         """
         while True:
             try:
-                cleaned_name: str = self.clean_name(name)
+                cleaned_name: str = self._clean_name(name)
                 break
             except ValueError:
                 name: str = input("Invalid name. Please, re-enter your name (first and last): ")
@@ -94,7 +94,7 @@ class Reservation:
         self._name = cleaned_name
 
     @property
-    def rdate(self) -> date:
+    def _rdate(self) -> date:
         """
         Gets the date of the reservation.
 
@@ -103,8 +103,8 @@ class Reservation:
         """
         return self._rdate
 
-    @rdate.setter
-    def rdate(self, rdate: str) -> None:
+    @_rdate.setter
+    def _rdate(self, rdate: str) -> None:
         """
         Sets the date attribute value of the reservation.
 
@@ -113,7 +113,7 @@ class Reservation:
         """
         while True:
             try:
-                cleaned_rdate: date = self.clean_date(rdate)
+                cleaned_rdate: date = self._clean_date(rdate)
                 break
             except (ValueError, TypeError, AttributeError):
                 rdate: str = input("Invalid date . Please, re-enter the date (dd-mm-yyyy): ")
@@ -121,7 +121,7 @@ class Reservation:
         self._rdate = cleaned_rdate
 
     @property
-    def rtime(self) -> time:
+    def _rtime(self) -> time:
         """
         Gets the time of the reservation.
 
@@ -130,8 +130,8 @@ class Reservation:
         """
         return self._rtime
 
-    @rtime.setter
-    def rtime(self, rtime: str) -> None:
+    @_rtime.setter
+    def _rtime(self, rtime: str) -> None:
         """
         Sets the time attribute value of the reservation.
 
@@ -140,7 +140,7 @@ class Reservation:
         """
         while True:
             try:
-                cleaned_rtime: time = self.clean_time(rtime)
+                cleaned_rtime: time = self._clean_time(rtime)
                 break
             except (ValueError, TypeError, AttributeError):
                 rtime: str = input("Invalid time . Please, re-enter the time (hh:mm, 24h format): ")
@@ -148,7 +148,7 @@ class Reservation:
         self._rtime = cleaned_rtime
 
     @property
-    def people(self) -> int:
+    def _people(self) -> int:
         """
         Gets the number of people who will attend the reservation.
 
@@ -157,8 +157,8 @@ class Reservation:
         """
         return self._people
 
-    @people.setter
-    def people(self, people: str) -> None:
+    @_people.setter
+    def _people(self, people: str) -> None:
         """
         Sets the people attribute value of the reservation.
 
@@ -167,7 +167,7 @@ class Reservation:
         """
         while True:
             try:
-                cleaned_people: int = self.clean_people(people)
+                cleaned_people: int = self._clean_people(people)
                 break
             except ValueError:
                 people: str = input("Invalid number. Please, re-enter the number of people (type a numeric number between 1 and 16): ")
@@ -176,7 +176,7 @@ class Reservation:
 
     # Validation methods
     @staticmethod
-    def clean_name(name: str) -> str:
+    def _clean_name(name: str) -> str:
         """
         Validates and cleans a name introduced by a user.
 
@@ -192,7 +192,7 @@ class Reservation:
             raise ValueError("Name not valid")
 
     @staticmethod
-    def clean_date(rdate: str) -> date:
+    def _clean_date(rdate: str) -> date:
         """
         Cleans and converts a date introduced by a user into a date object.
 
@@ -218,7 +218,7 @@ class Reservation:
         else:
             return cleaned_date
 
-    def clean_time(self, rtime: str) -> time:
+    def _clean_time(self, rtime: str) -> time:
         """
         Cleans and converts a time introduced by a user into a time object.
 
@@ -238,12 +238,12 @@ class Reservation:
             hour = int(reservation_time.group(1)),
             minute = int(reservation_time.group(2))
         )
-        if self.rdate <= current_date and cleaned_time < current_time:
+        if self._rdate <= current_date and cleaned_time < current_time:
             raise ValueError("The date entered has already passed")
         else:
             return cleaned_time
 
-    def clean_people(self, people: str) -> int:
+    def _clean_people(self, people: str) -> int:
         """
         Cleans and converts a number of people introduced by a user into a time object.
 
@@ -271,22 +271,22 @@ class Reservation:
         :return: A string with the result of the operation.
         :rtype: str
         """
-        print(cls.get_name_constraints())
-        reservation: Reservation = cls(cls.request_name())
-        if not cls.check_name_availability(reservation):
+        print(cls._get_name_constraints())
+        reservation: Reservation = cls(cls._request_name())
+        if not cls._check_name_availability(reservation):
             return "There is already a reservation with that name."
         
-        reservation.rdate = cls.request_date()
-        print(cls.get_time_constraints())
-        reservation.rtime = cls.request_time()
-        print(cls.get_people_constraints())
-        reservation.people = cls.request_people()
-        if not cls.check_reservation_availability(reservation):
+        reservation._rdate = cls._request_date()
+        print(cls._get_time_constraints())
+        reservation._rtime = cls._request_time()
+        print(cls._get_people_constraints())
+        reservation._people = cls._request_people()
+        if not cls._check_reservation_availability(reservation):
             return "Sorry, we do not have availability for the data you have provided."
         
-        cls.update_database(reservation)
-        cls.create_confirmation_document(reservation)
-        return cls.get_confirmation_message()
+        cls.__update_database(reservation)
+        cls._create_confirmation_document(reservation)
+        return cls._get_confirmation_message()
 
     @classmethod
     def read_reservation(cls):
@@ -354,7 +354,7 @@ class Reservation:
 
     # Request methods
     @staticmethod
-    def request_name() -> str:
+    def _request_name() -> str:
         """
         Requests the user for the name of the reservation.
 
@@ -364,7 +364,7 @@ class Reservation:
         return input("Enter the name of the reservation (first and last): ")
 
     @staticmethod
-    def request_date() -> str:
+    def _request_date() -> str:
         """
         Requests the user for the date of the reservation.
 
@@ -374,7 +374,7 @@ class Reservation:
         return input("Enter the date of the reservation (dd-mm-yyyy): ")
 
     @staticmethod
-    def request_time() -> str:
+    def _request_time() -> str:
         """
         Requests the user for the name of the reservation.
 
@@ -384,7 +384,7 @@ class Reservation:
         return input("Enter the time of the reservation (hh:mm, 24h format): ")
 
     @staticmethod
-    def request_people() -> str:
+    def _request_people() -> str:
         """
         Requests the user for the number of people who will attend the reservation.
 
@@ -395,7 +395,7 @@ class Reservation:
 
     # Check availability in the database
     @classmethod
-    def check_name_availability(cls, user_reservation: Reservation) -> bool:
+    def _check_name_availability(cls, user_reservation: Reservation) -> bool:
         """
         Checks if the name entered by the user is available to make a reservation.
 
@@ -404,14 +404,14 @@ class Reservation:
         :return: True if the name entered by the user is available, False if is not.
         :rtype: bool
         """
-        database_reservations = cls.get_list_of_reservations()
+        database_reservations = cls.__get_list_of_reservations()
         for database_reservation in database_reservations:
-            if database_reservation["name"] == user_reservation.name:
+            if database_reservation["name"] == user_reservation._name:
                 return False
         return True
 
     @classmethod
-    def check_reservation_availability(cls, user_reservation: Reservation) -> bool:
+    def _check_reservation_availability(cls, user_reservation: Reservation) -> bool:
         """
         Checks if the name entered by the user is available to make a reservation.
 
@@ -420,11 +420,11 @@ class Reservation:
         :return: True if the name entered by the user is available, False if is not.
         :rtype: bool
         """
-        database_reservations = cls.get_list_of_reservations()
-        tables_available = cls.restaurant_tables
+        database_reservations = cls.__get_list_of_reservations()
+        tables_available = cls._restaurant_tables
         for database_reservation in database_reservations:
-            if database_reservation["rdate"] == user_reservation.rdate.strftime("%Y-%m-%d"):
-                if database_reservation["rtime"] == user_reservation.rtime.strftime("%H:%M"):
+            if database_reservation["rdate"] == user_reservation._rdate.strftime("%Y-%m-%d"):
+                if database_reservation["rtime"] == user_reservation._rtime.strftime("%H:%M"):
                     # TODO: no hardcode
                     match database_reservation["people"]:
                         case 1 | 2 | 3 | 4:
@@ -437,13 +437,13 @@ class Reservation:
                             tables_available -= 4
         return False if (
             tables_available == 0 or
-            user_reservation.people / tables_available > cls.tables_capacity or
-            user_reservation.people / tables_available < 0
+            user_reservation._people / tables_available > cls._tables_capacity or
+            user_reservation._people / tables_available < 0
         ) else True
 
     # Contraints
     @staticmethod
-    def get_name_constraints() -> str:
+    def _get_name_constraints() -> str:
         """
         Gets a message with the name constraints for the reservation.
 
@@ -453,7 +453,7 @@ class Reservation:
         return "Only one reservation per person is allowed."
 
     @staticmethod
-    def get_time_constraints() -> str:
+    def _get_time_constraints() -> str:
         """
         Gets a message with the time constraints for the reservation.
 
@@ -464,7 +464,7 @@ class Reservation:
         return "Time slots for reservations: 12:00h, 14:00h, 20:00h and 22:00h."
 
     @classmethod
-    def get_people_constraints(cls) -> str:
+    def _get_people_constraints(cls) -> str:
         """
         Gets a message with the people constraints for the reservation.
 
@@ -472,13 +472,13 @@ class Reservation:
         :rtype: str
         """
         return (
-            f"Maximum capacity of the restaurant by time slots: {cls.restaurant_capacity}, "
-            f"{cls.restaurant_tables} tables of {cls.tables_capacity} people each."
+            f"Maximum capacity of the restaurant by time slots: {cls._restaurant_capacity}, "
+            f"{cls._restaurant_tables} tables of {cls._tables_capacity} people each."
         )
 
     # Closing messages
     @staticmethod
-    def get_confirmation_message() -> str:
+    def _get_confirmation_message() -> str:
         """
         Gets a message with the confirmation of the reservation.
 
@@ -488,7 +488,7 @@ class Reservation:
         return "Reservation confirmed! You will shortly receive a reminder document with the appointment details."
 
     @staticmethod
-    def get_delete_message() -> str:
+    def _get_delete_message() -> str:
         """
         Gets a message confirming the reservation deletion.
 
@@ -509,7 +509,7 @@ class Reservation:
 
     # Other methods
     @staticmethod
-    def create_confirmation_document(reservation) -> None:
+    def _create_confirmation_document(reservation) -> None:
         """
         Generate a pdf with the confirmation and data of the reservation.
 
@@ -545,7 +545,7 @@ class Reservation:
         pdf.output("reservation.pdf")
 
     @classmethod
-    def update_database(cls, user_reservation: Reservation) -> None:
+    def __update_database(cls, user_reservation: Reservation) -> None:
         """
         Updates the database to include a new reservation.
 
@@ -553,13 +553,13 @@ class Reservation:
         :type user_reservation: Reservation
         """
         # Extract a list of the database reservations
-        database_reservations = cls.get_list_of_reservations()
+        database_reservations = cls.__get_list_of_reservations()
         # Add the new reservation to the list
         database_reservations.append(dict(
-            name = user_reservation.name,
-            rdate = user_reservation.rdate.strftime("%Y-%m-%d"),
-            rtime = user_reservation.rtime.strftime("%H:%M"),
-            people = user_reservation.people
+            name = user_reservation._name,
+            rdate = user_reservation._rdate.strftime("%Y-%m-%d"),
+            rtime = user_reservation._rtime.strftime("%H:%M"),
+            people = user_reservation._people
         ))
         # Sort the reservations list by date
         sorted_database_reservations = sorted(
@@ -575,10 +575,10 @@ class Reservation:
         with open("reservation_database.json", "w") as database:
             database.write(dumps(new_database_dict, indent=4))
         # Export confirmation document
-        cls.create_confirmation_document(user_reservation)
+        cls._create_confirmation_document(user_reservation)
 
     @staticmethod
-    def get_list_of_reservations() -> list:
+    def __get_list_of_reservations() -> list:
         """
         Gets a list of all the reservations, in form of dictionaries, stored in the database.
 
