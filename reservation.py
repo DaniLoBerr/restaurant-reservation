@@ -272,11 +272,11 @@ class Reservation:
         :return: A string with the result of the operation.
         :rtype: str
         """
+        # Get data from user and check availability
         print(cls._get_name_constraints())
         reservation: Reservation = cls(cls._request_name())
         if not cls._check_name_availability(reservation):
             return "There is already a reservation with that name."
-        
         reservation._rdate = cls._request_date()
         print(cls._get_time_constraints())
         reservation._rtime = cls._request_time()
@@ -284,7 +284,7 @@ class Reservation:
         reservation._people = cls._request_people()
         if not cls._check_reservation_availability(reservation):
             return "Sorry, we do not have availability for the data you have provided."
-        
+        # Update database and confirmation
         cls.__update_database(reservation)
         cls._create_confirmation_document(reservation)
         return cls._get_confirmation_message()
