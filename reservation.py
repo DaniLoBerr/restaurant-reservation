@@ -243,7 +243,8 @@ class Reservation:
         else:
             return cleaned_time
 
-    def _clean_people(self, people: str) -> int:
+    @staticmethod
+    def _clean_people(people: str) -> int:
         """
         Cleans and converts a number of people introduced by a user into a time object.
 
