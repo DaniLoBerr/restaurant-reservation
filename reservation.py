@@ -405,7 +405,7 @@ class Reservation:
         :return: True if the name entered by the user is available, False if is not.
         :rtype: bool
         """
-        database_reservations = cls.__get_list_of_reservations()
+        database_reservations = cls.__get_reservations_list()
         for database_reservation in database_reservations:
             if database_reservation["name"] == user_reservation._name:
                 return False
@@ -421,7 +421,7 @@ class Reservation:
         :return: True if the name entered by the user is available, False if is not.
         :rtype: bool
         """
-        database_reservations = cls.__get_list_of_reservations()
+        database_reservations = cls.__get_reservations_list()
         tables_available = cls._restaurant_tables
         for database_reservation in database_reservations:
             if database_reservation["rdate"] == user_reservation._rdate.strftime("%Y-%m-%d"):
@@ -554,7 +554,7 @@ class Reservation:
         :type user_reservation: Reservation
         """
         # Extract a list of the database reservations
-        database_reservations = cls.__get_list_of_reservations()
+        database_reservations = cls.__get_reservations_list()
         # Add the new reservation to the list
         database_reservations.append(dict(
             name = user_reservation._name,
@@ -579,7 +579,7 @@ class Reservation:
         cls._create_confirmation_document(user_reservation)
 
     @staticmethod
-    def __get_list_of_reservations() -> list:
+    def __get_reservations_list() -> list:
         """
         Gets a list of all the reservations, in form of dictionaries, stored in the database.
 
