@@ -104,7 +104,7 @@ class Reservation:
         return self._rdate
 
     @_date.setter
-    def _date(self, date: str) -> None:
+    def _date(self, rdate: str) -> None:
         """
         Sets the date attribute value of the reservation.
 
@@ -113,10 +113,10 @@ class Reservation:
         """
         while True:
             try:
-                cleaned_date: date = self._clean_date(date)
+                cleaned_date: date = self._clean_date(rdate)
                 break
             except (ValueError, TypeError, AttributeError):
-                date: str = input("Invalid date . Please, re-enter the date (dd-mm-yyyy): ")
+                rdate: str = input("Invalid date . Please, re-enter the date (dd-mm-yyyy): ")
                 continue
         self._rdate = cleaned_date
 
@@ -131,7 +131,7 @@ class Reservation:
         return self._rtime
 
     @_time.setter
-    def _time(self, time: str) -> None:
+    def _time(self, rtime: str) -> None:
         """
         Sets the time attribute value of the reservation.
 
@@ -140,10 +140,10 @@ class Reservation:
         """
         while True:
             try:
-                cleaned_time: time = self._clean_time(time)
+                cleaned_time: time = self._clean_time(rtime)
                 break
             except (ValueError, TypeError, AttributeError):
-                time: str = input("Invalid time . Please, re-enter the time (hh:mm, 24h format): ")
+                rtime: str = input("Invalid time . Please, re-enter the time (hh:mm, 24h format): ")
                 continue
         self._rtime = cleaned_time
 
