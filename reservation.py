@@ -116,7 +116,7 @@ class Reservation:
                 cleaned_date: date = self._clean_date(date)
                 break
             except (ValueError, TypeError, AttributeError):
-                rdate: str = input("Invalid date . Please, re-enter the date (dd-mm-yyyy): ")
+                date: str = input("Invalid date . Please, re-enter the date (dd-mm-yyyy): ")
                 continue
         self._rdate = cleaned_date
 
@@ -143,7 +143,7 @@ class Reservation:
                 cleaned_time: time = self._clean_time(time)
                 break
             except (ValueError, TypeError, AttributeError):
-                rtime: str = input("Invalid time . Please, re-enter the time (hh:mm, 24h format): ")
+                time: str = input("Invalid time . Please, re-enter the time (hh:mm, 24h format): ")
                 continue
         self._rtime = cleaned_time
 
