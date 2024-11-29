@@ -53,17 +53,17 @@ class Reservation:
             rtime: str = "12:00",
             rpeople: str = "0"
         ) -> None:
-        """
-        Initializes a Reservation object.
+        """Initializes a Reservation object.
 
-        :param name: The name of the person making the reservation.
-        :type name: str
-        :param rdate: The date of the reservation.
+        :param rname: The name of the person making the reservation.
+        :type rname: str
+        :param rdate: The date of the reservation (default "1-1-3000").
         :type rdate: str
-        :param rtime: The time of the reservation.
+        :param rtime: The time of the reservation (default "12:00").
         :type rtime: str
-        :param people: The number of people who will attend.
-        :type people: str
+        :param rpeople: The number of people who will attend 
+        (default "0").
+        :type rpeople: str
         """
 
         self._name: str = rname
