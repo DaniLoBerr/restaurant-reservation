@@ -189,7 +189,7 @@ class Reservation:
             try:
                 cleaned_people: int = self._clean_people(people)
                 break
-            except ValueError:
+            except AttributeError:
                 people: str = input("Invalid number. Please, re-enter the number of people (type a numeric number between 1 and 16): ")
                 continue
         self._rpeople = cleaned_people
@@ -276,11 +276,7 @@ class Reservation:
         """
 
         reservation_people = search(r"^([0-1]?[0-6]|[7-9])$", people)
-        cleaned_people = int(reservation_people.group(1))
-        if cleaned_people == None:
-            raise ValueError("The number entered is not valid")
-        else:
-            return cleaned_people
+        return int(reservation_people.group(1))
 
     # CRUD reservations
     @classmethod
