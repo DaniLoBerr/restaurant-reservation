@@ -106,12 +106,12 @@ class Reservation:
 
         while True:
             try:
-                cleaned_name: str = self._clean_name(name)
+                validated_name: str = self._validate_name(name)
                 break
             except ValueError:
                 name: str = input("Invalid name. Please, re-enter your name (first and last): ")
                 continue
-        self._rname = cleaned_name
+        self._rname = validated_name
 
     @property
     def _date(self) -> date:
@@ -133,12 +133,12 @@ class Reservation:
 
         while True:
             try:
-                cleaned_date: date = self._clean_date(rdate)
+                validated_date: date = self._validate_date(rdate)
                 break
             except (ValueError, TypeError, AttributeError):
                 rdate: str = input("Invalid date . Please, re-enter the date (dd-mm-yyyy): ")
                 continue
-        self._rdate = cleaned_date
+        self._rdate = validated_date
 
     @property
     def _time(self) -> time:
@@ -160,12 +160,12 @@ class Reservation:
 
         while True:
             try:
-                cleaned_time: time = self._clean_time(rtime)
+                validated_time: time = self._validate_time(rtime)
                 break
             except (ValueError, TypeError, AttributeError):
                 rtime: str = input("Invalid time . Please, re-enter the time (hh:mm, 24h format): ")
                 continue
-        self._rtime = cleaned_time
+        self._rtime = validated_time
 
     @property
     def _people(self) -> int:
@@ -187,16 +187,16 @@ class Reservation:
 
         while True:
             try:
-                cleaned_people: int = self._clean_people(people)
+                validated_people: int = self._validate_people(people)
                 break
             except AttributeError:
                 people: str = input("Invalid number. Please, re-enter the number of people (type a numeric number between 1 and 16): ")
                 continue
-        self._rpeople = cleaned_people
+        self._rpeople = validated_people
 
     # Validation methods
     @staticmethod
-    def _clean_name(name: str) -> str:
+    def _validate_name(name: str) -> str:
         """Validates and formats the name entered by the user.
 
         :param name: The user's name in the format "first-name last-name".
@@ -213,7 +213,7 @@ class Reservation:
             raise ValueError("Name not valid")
 
     @staticmethod
-    def _clean_date(rdate: str) -> date:
+    def _validate_date(rdate: str) -> date:
         """Converts and validates a date string into a date object.
 
         :param rdate: The date string in "dd-mm-yyyy" format.
@@ -228,17 +228,17 @@ class Reservation:
 
         current_date = date.today()
         reservation_date = search(r"^(\d{1,2})-(\d{1,2})-(\d{4})$", rdate)
-        cleaned_date = date(
+        validated_date = date(
             year = int(reservation_date.group(3)),
             month = int(reservation_date.group(2)),
             day = int(reservation_date.group(1))
         )
-        if cleaned_date < current_date:
+        if validated_date < current_date:
             raise ValueError("The date entered has already passed")
         else:
-            return cleaned_date
+            return validated_date
 
-    def _clean_time(self, rtime: str) -> time:
+    def _validate_time(self, rtime: str) -> time:
         """Converts and validates a time string into a time object.
 
         :param rtime: The time string in "hh:mm" 24h format.
@@ -254,17 +254,17 @@ class Reservation:
         current_date = datetime.today().date()
         current_time = datetime.today().time()
         reservation_time = search(r"^(12|14|20|22):(00)$", rtime)
-        cleaned_time = time(
+        validated_time = time(
             hour = int(reservation_time.group(1)),
             minute = int(reservation_time.group(2))
         )
-        if self._date <= current_date and cleaned_time < current_time:
+        if self._date <= current_date and validated_time < current_time:
             raise ValueError("The date entered has already passed")
         else:
-            return cleaned_time
+            return validated_time
 
     @staticmethod
-    def _clean_people(people: str) -> int:
+    def _validate_people(people: str) -> int:
         """Converts and validates a number string into a integer.
 
         :param people: A number string in "n" format.
