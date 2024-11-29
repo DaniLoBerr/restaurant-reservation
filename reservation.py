@@ -197,15 +197,16 @@ class Reservation:
     # Validation methods
     @staticmethod
     def _clean_name(name: str) -> str:
-        """
-        Validates and cleans a name introduced by a user.
+        """Validates and formats the name entered by the user.
 
-        :param name: A string in the form of "first-name last-name".
+        :param name: The user's name in the format "first-name last-name".
         :type name: str
-        :return: A string in the form of "First-name Last-name".
+        :return: A formated string in the format "First-name Last-name".
         :rtype: str
-        :raises ValueError: If name isn't in the correct format.
+        :raise ValueError: If name isn't in the correct "first-name 
+        last-name" format.
         """
+
         if matches := search(r"^([a-zñáéíóú]{1,20}) ([a-zñáéíóú]{1,20})$", name, IGNORECASE):
             return f"{matches.group(1).title()} {matches.group(2).title()}"
         else:
@@ -213,19 +214,18 @@ class Reservation:
 
     @staticmethod
     def _clean_date(rdate: str) -> date:
-        """
-        Cleans and converts a date introduced by a user into a date object.
+        """Converts and validates a date string into a date object.
 
-        Parameters:
-        :param rdate (str): a string date in the form of "dd-mm-yyyy".
+        :param rdate: The date string in "dd-mm-yyyy" format.
         :type rdate: str
-        :returns: A date object that includes the date of the reservation.
-        :rtype: dtr
-        :raises ValueError: If the date entered by the user is before the current date.
-        :raises ValueError: If the day, month or year values are not correct.
-        :raises AttributeError: If date isn't in the correct format.
-        :raises TypeError: If the user enters a value other than numbers.
+        :return: The corresponding date object.
+        :rtype: date
+        :raise ValueError: If rdate is in the past or improperly formatted.
+        :raise TypeError: If a non-numeric value is entered.
+        :raise AttributeError: If rdate isn't in the correct "xx-xx-xxxx" 
+        hyphens format.
         """
+
         current_date = date.today()
         reservation_date = search(r"^(\d{1,2})-(\d{1,2})-(\d{4})$", rdate)
         cleaned_date = date(
@@ -239,18 +239,18 @@ class Reservation:
             return cleaned_date
 
     def _clean_time(self, rtime: str) -> time:
-        """
-        Cleans and converts a time introduced by a user into a time object.
+        """Converts and validates a time string into a time object.
 
-        :param rtime: A string time in the form of "hh:mm" with the 24h format.
+        :param rtime: The time string in "hh:mm" 24h format.
         :type rtime: str
-        :returns: A time object that includes the time of the reservation.
+        :return: The corresponding time object.
         :rtype: time
-        :raises ValueError: If the time entered by the user is before the current date and time.
-        :raises ValueError: If the hour or minute values are not correct.
-        :raises AttributeError: If time isn't in the correct format.
-        :raises TypeError: If the user enters a value other than numbers.
+        :raise ValueError: If the time is in the past or improperly formatted.
+        :raise TypeError: If a non-numeric value is entered.
+        :raise AttributeError: If rtime isn't in the correct "xx:xx" colon 
+        format.
         """
+
         current_date = datetime.today().date()
         current_time = datetime.today().time()
         reservation_time = search(r"^(12|14|20|22):(00)$", rtime)
@@ -265,17 +265,16 @@ class Reservation:
 
     @staticmethod
     def _clean_people(people: str) -> int:
-        """
-        Cleans and converts a number of people introduced by a user into a time object.
+        """Converts and validates a number string into a integer.
 
-        :param people: a string number in the form of "n".
+        :param people: A number string in "n" format.
         :type people: str
-        :return: An integer representing the number of people that will attend to the restaurant.
+        :return: A corresponding integer number.
         :rtype: int
-        :raises ValueError: If the number entered by the user is less than 1 or greater than 16.
-        :raises AttributeError: If time isn't in the correct format.
-        :raises TypeError: If the user enters a value other than numbers.
+        :raise AttributeError: If people's value is anything but a number
+        between 1 and 16, both included.
         """
+
         reservation_people = search(r"^([0-1]?[0-6]|[7-9])$", people)
         cleaned_people = int(reservation_people.group(1))
         if cleaned_people == None:
