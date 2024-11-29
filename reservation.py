@@ -72,12 +72,12 @@ class Reservation:
         self._people: int = rpeople
 
     def __str__(self) -> str:
-        """
-        Returns a string representation of a Reservation instance.
+        """Returns a string representation of a Reservation instance.
 
         :return: A string with the information of a Reservation instance.
         :rtype: str
         """
+
         return (
             f"Reservation for {self._people} people " +
             f"in the name of {self._name} " +
