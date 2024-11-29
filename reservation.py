@@ -88,22 +88,22 @@ class Reservation:
     # Getters and Setters
     @property
     def _name(self) -> str:
-        """
-        Gets the name of the reservation.
+        """Gets the name of the reservation.
 
         :return: The name of the person making the reservation.
         :rtype: str
         """
+
         return self._rname
 
     @_name.setter
     def _name(self, name: str) -> None:
-        """
-        Sets the name attribute value of the reservation.
+        """Sets the name attribute value of the reservation.
 
         :param name: The name attribute value of the Reservation instance.
         :type name: str
         """
+
         while True:
             try:
                 cleaned_name: str = self._clean_name(name)
@@ -115,22 +115,22 @@ class Reservation:
 
     @property
     def _date(self) -> date:
-        """
-        Gets the date of the reservation.
+        """Gets the date of the reservation.
 
         :return: A date object representing the date of the reservation.
         :rtype: date
         """
+
         return self._rdate
 
     @_date.setter
     def _date(self, rdate: str) -> None:
-        """
-        Sets the date attribute value of the reservation.
+        """Sets the date attribute value of the reservation.
 
         :param rdate: The date attribute value of the Reservation instance.
         :type rdate: str
         """
+
         while True:
             try:
                 cleaned_date: date = self._clean_date(rdate)
@@ -142,22 +142,22 @@ class Reservation:
 
     @property
     def _time(self) -> time:
-        """
-        Gets the time of the reservation.
+        """Gets the time of the reservation.
 
         :return: A time object representing the time of the reservation.
         :rtype: time
         """
+
         return self._rtime
 
     @_time.setter
     def _time(self, rtime: str) -> None:
-        """
-        Sets the time attribute value of the reservation.
+        """Sets the time attribute value of the reservation.
 
         :param rtime: The time attribute of the Reservation instance.
         :type rtime: str
         """
+
         while True:
             try:
                 cleaned_time: time = self._clean_time(rtime)
@@ -169,22 +169,22 @@ class Reservation:
 
     @property
     def _people(self) -> int:
-        """
-        Gets the number of people who will attend the reservation.
+        """Gets the number of people who will attend the reservation.
 
         :return: The number of people who will attend the reservation.
         :rtype: int
         """
+
         return self._rpeople
 
     @_people.setter
     def _people(self, people: str) -> None:
-        """
-        Sets the people attribute value of the reservation.
+        """Sets the people attribute value of the reservation.
 
         :param people: The people attribute of the Reservation instance.
         :type people: str
         """
+
         while True:
             try:
                 cleaned_people: int = self._clean_people(people)
