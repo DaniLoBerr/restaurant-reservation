@@ -9,18 +9,37 @@ from fpdf import FPDF, enums
 
 
 class Reservation:
-    """
-    A class representing a reservation for a resturant.
+    """A class used to represent a restaurant reservation.
 
-    :param name: The name of the person making the reservation.
-    :type name: str
-    :param rdate: The date of the reservation.
-    :type rdate: date
-    :param rtime: The time of the reservation.
-    :type rtime: time
-    :param people: The number of people who will attend.
-    :type people: int
+    **Class variables**
+    :cvar _restaurant_tables: The number of tables in the restaurant.
+    :vartype: int
+    :cvar _tables_capacity: The number of people per table.
+    :vartype: int
+    :cvar _restaurant_capacity: The maximum number of customers.
+    :vartype: int
+
+    **Attributes**
+    :attr _name: The name of the person making the reservation.
+    :type _name: str
+    :attr _date: The date of the reservation.
+    :type _date: date
+    :attr _time: The time of the reservation.
+    :type _time: time
+    :attr _people: The number of people who will attend.
+    :type _people: int
+
+    **Public methods**
+    :meth create_reservation: Creates a new reservation and stores it 
+    in the database.
+    :meth read_reservation: Gets the data of a reservation stored in 
+    the database.
+    :meth update_reservation: Updates the data of a reservation 
+    stored in the database.
+    :meth delete_reservation: Deletes a reservation stored in the 
+    database.
     """
+
     # Class variables
     _restaurant_tables: int = 4
     _tables_capacity: int = 4
@@ -46,6 +65,7 @@ class Reservation:
         :param people: The number of people who will attend.
         :type people: str
         """
+
         self._name: str = rname
         self._date: date = rdate
         self._time: time = rtime
