@@ -521,25 +521,30 @@ class Reservation:
             f"{cls._restaurant_tables} tables of {cls._tables_capacity} people each."
         )
 
-    # Closing messages
+    # Closing messages methods
+    # TODO: Refactor functionality of this methods
     @staticmethod
     def _get_confirmation_message() -> str:
-        """
-        Gets a message with the confirmation of the reservation.
+        """Returns a confirmation message for a reservation.
 
-        :return: A confirmation message.
+        :return: A string confirming the operation.
         :rtype: str
         """
-        return "Reservation confirmed! You will shortly receive a reminder document with the appointment details."
+
+        return(
+            "Reservation confirmed! You will shortly receive a " +
+            "reminder document with the appointment details."
+        )
 
     @staticmethod
     def _get_delete_message() -> str:
-        """
-        Gets a message confirming the reservation deletion.
+        """Returns a delete confirmation message for a reservation.
 
-        :return: A confirming deletion message.
+        :return: A confirmation message indicating that the 
+        reservation was canceled.
         :rtype: str
         """
+
         return "Reservation deleted."
 
     # Other methods
