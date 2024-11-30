@@ -429,15 +429,19 @@ class Reservation:
     # Check availability in the database
     @classmethod
     def _check_name_availability(cls, user_reservation: Reservation) -> bool:
-        """
-        Checks if the name entered by the user is available to make a reservation.
+        """Verifies whether the name provided by the user is available for a 
+        reservation.
 
-        :param user_reservation: A reservation object.
+        :param user_reservation: An instance of the Reservation class 
+        containing the user's details.
         :type user_reservation: Reservation
-        :return: True if the name entered by the user is available, False if is not.
+        :return: True if the name is available, False otherwise.
         :rtype: bool
         """
+
+        # Retrieve the list of current reservations from the database
         database_reservations = cls.__get_reservations_list()
+        # Check if any reservation already uses the provided name
         for database_reservation in database_reservations:
             if database_reservation["name"] == user_reservation._name:
                 return False
