@@ -18,6 +18,9 @@ class Reservation:
     :vartype: int
     :cvar _restaurant_capacity: The maximum number of customers.
     :vartype: int
+    :cvar _reservation_slots: The predefined time slots when reservations 
+    can be made.
+    :vartype: list
 
     **Attributes**
     :attr _name: The name of the person making the reservation.
@@ -44,6 +47,12 @@ class Reservation:
     _restaurant_tables: int = 4
     _tables_capacity: int = 4
     _restaurant_capacity: int = 16
+    _reservation_slots: list = [
+        time(12, 0),
+        time(14, 0),
+        time(20, 0),
+        time(22, 0)
+    ]
 
     # Special methods
     def __init__(
@@ -253,6 +262,7 @@ class Reservation:
 
         current_date = datetime.today().date()
         current_time = datetime.today().time()
+        # TODO: Replace hardcode. Use _reservation_slots
         reservation_time = search(r"^(12|14|20|22):(00)$", rtime)
         validated_time = time(
             hour = int(reservation_time.group(1)),
@@ -475,16 +485,19 @@ class Reservation:
         """
         return "Only one reservation per person is allowed."
 
-    @staticmethod
-    def _get_time_constraints() -> str:
+    @classmethod
+    def _get_time_constraints(cls) -> str:
         """
         Gets a message with the time constraints for the reservation.
 
         :return: A message with the time constraints.
         :rtype: str
         """
-        # TODO: No hardcode
-        return "Time slots for reservations: 12:00h, 14:00h, 20:00h and 22:00h."
+
+        return(
+            "Time slots for reservations: " + 
+            ", ".join(t.strftime("%H:%M") for t in cls._reservation_slots)
+        )
 
     @classmethod
     def _get_people_constraints(cls) -> str:
