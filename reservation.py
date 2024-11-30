@@ -449,20 +449,26 @@ class Reservation:
 
     @classmethod
     def _check_reservation_availability(cls, user_reservation: Reservation) -> bool:
-        """
-        Checks if the name entered by the user is available to make a reservation.
+        """Checks if a reservation can be made based on the restaurant's 
+        current availability.
 
-        :param user_reservation: A reservation object.
+        This method verifies the availability of tables for the specified date, 
+        time and number of people, and ensures the reservation request aligns 
+        with capacity constraints.
+
+        :param user_reservation: An instance of the Reservation class containing 
+        reservation details.
         :type user_reservation: Reservation
-        :return: True if the name entered by the user is available, False if is not.
+        :return: True if the reservation can be accommodated, False otherwise.
         :rtype: bool
         """
+
+        #TODO: refactor this and add comments
         database_reservations = cls.__get_reservations_list()
         tables_available = cls._restaurant_tables
         for database_reservation in database_reservations:
             if database_reservation["date"] == user_reservation._date.strftime("%Y-%m-%d"):
                 if database_reservation["time"] == user_reservation._time.strftime("%H:%M"):
-                    # TODO: no hardcode
                     match database_reservation["people"]:
                         case 1 | 2 | 3 | 4:
                             tables_available -= 1
