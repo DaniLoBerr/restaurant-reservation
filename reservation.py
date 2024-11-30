@@ -278,15 +278,22 @@ class Reservation:
         reservation_people = search(r"^([0-1]?[0-6]|[7-9])$", people)
         return int(reservation_people.group(1))
 
-    # CRUD reservations
+    # CRUD reservation methods
     @classmethod
     def create_reservation(cls) -> str:
-        """
-        Creates a new reservation, stores it in the database and creates a pdf document with the info
+        """Creates a new reservation.
+        
+        This method prints the constraints and requests the necessary data
+        to create a reservation object with it to store it as a dictionary 
+        in a json file database.
+        It checks for availability in the database and ... TODO mestores it in the database, 
+        creates and exports a pdf document with the info and 
+        returns a 
 
         :return: A string with the result of the operation.
         :rtype: str
         """
+
         # Get data from user and check availability
         print(cls._get_name_constraints())
         reservation: Reservation = cls(cls._request_name())
