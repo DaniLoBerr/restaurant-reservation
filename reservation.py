@@ -281,8 +281,16 @@ class Reservation:
     # CRUD reservation methods
     @classmethod
     def create_reservation(cls) -> None:
-        """
-        ...
+        """Creates a new reservation.
+        
+        This method prints the constraints and requests the necessary data
+        to create a reservation object with it to store it as a dictionary 
+        in a json file database.
+        It checks for availability in the database based on the user data 
+        and the restaurant constraints and exits the program if there is
+        none. If available, updates the database with the new 
+        reservation, exports a confirmation pdf with the reservation info 
+        and prints a confirmation message.
         """
 
         # Get data from user and check availability
