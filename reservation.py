@@ -280,39 +280,30 @@ class Reservation:
 
     # CRUD reservation methods
     @classmethod
-    def create_reservation(cls) -> str:
-        """Creates a new reservation.
-        
-        This method prints the constraints and requests the necessary data
-        to create a reservation object with it to store it as a dictionary 
-        in a json file database.
-        It checks for availability in the database and ... TODO mestores it in the database, 
-        creates and exports a pdf document with the info and 
-        returns a 
-
-        :return: A string with the result of the operation.
-        :rtype: str
+    def create_reservation(cls) -> None:
+        """
+        ...
         """
 
         # Get data from user and check availability
         print(cls._get_name_constraints())
         reservation: Reservation = cls(cls._request_name())
         if not cls._check_name_availability(reservation):
-            return "There is already a reservation with that name."
+            exit("There is already a reservation with that name.")
         reservation._date = cls._request_date()
         print(cls._get_time_constraints())
         reservation._time = cls._request_time()
         print(cls._get_people_constraints())
         reservation._people = cls._request_people()
         if not cls._check_reservation_availability(reservation):
-            return "Sorry, we do not have availability for the data you have provided."
+            exit("Sorry, we do not have availability for the data you have provided.")
         # Update database and confirmation
         cls.__update_database(reservation)
         cls._create_confirmation_document(reservation)
-        return cls._get_confirmation_message()
+        print(cls._get_confirmation_message())
 
     @classmethod
-    def read_reservation(cls):
+    def read_reservation(cls) -> None:
         """
         ...
         """
@@ -326,7 +317,7 @@ class Reservation:
         ...
 
     @classmethod
-    def update_reservation(cls):
+    def update_reservation(cls) -> None:
         """
         ...
         """
@@ -360,7 +351,7 @@ class Reservation:
         ...
 
     @classmethod
-    def delete_reservation(cls):
+    def delete_reservation(cls) -> None:
         """
         ...
         """
@@ -631,11 +622,11 @@ def main():
             ": "
         ).lower()
     ):
-        case "a": print(Reservation.create_reservation())
-        case "b": print(Reservation.read_reservation())
-        case "c": print(Reservation.update_reservation())
-        case "d": print(Reservation.delete_reservation())
-        case "e": exit(Reservation.get_goodbye_message())
+        case "a": Reservation.create_reservation()
+        case "b": Reservation.read_reservation()
+        case "c": Reservation.update_reservation()
+        case "d": Reservation.delete_reservation()
+        case "e": pass
         case _: exit("The option entered is not correct")
     print(Reservation.get_goodbye_message())
 
