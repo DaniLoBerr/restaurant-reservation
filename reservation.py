@@ -484,23 +484,22 @@ class Reservation:
             user_reservation._people / tables_available < 0
         ) else True
 
-    # Contraints
+    # Get contraints methods
     @staticmethod
     def _get_name_constraints() -> str:
-        """
-        Gets a message with the name constraints for the reservation.
+        """Returns a message explaining the name constraints for reservations.
 
-        :return: A message with the name constraints.
+        :return: A string describing the name constraints.
         :rtype: str
         """
+
         return "Only one reservation per person is allowed."
 
     @classmethod
     def _get_time_constraints(cls) -> str:
-        """
-        Gets a message with the time constraints for the reservation.
+        """Returns a message explaining the time constraints for reservations.
 
-        :return: A message with the time constraints.
+        :return: A string describing the time constraints.
         :rtype: str
         """
 
@@ -511,12 +510,12 @@ class Reservation:
 
     @classmethod
     def _get_people_constraints(cls) -> str:
-        """
-        Gets a message with the people constraints for the reservation.
+        """Returns a message explaining the people constraints for reservations.
 
-        :return: A message with the people constraints.
+        :return: A string describing the people constraints.
         :rtype: str
         """
+
         return (
             f"Maximum capacity of the restaurant by time slots: {cls._restaurant_capacity}, "
             f"{cls._restaurant_tables} tables of {cls._tables_capacity} people each."
