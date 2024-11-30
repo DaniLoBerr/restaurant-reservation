@@ -377,42 +377,43 @@ class Reservation:
     # Request methods
     @staticmethod
     def _request_name() -> str:
-        """
-        Requests the user for the name of the reservation.
+        """Requests the user to input the name for the reservation.
 
-        :return: The name entered by the user for the reservation.
+        :return: The reservation name entered by the user.
         :rtype: str
         """
+
         return input("Enter the name of the reservation (first and last): ")
 
     @staticmethod
     def _request_date() -> str:
-        """
-        Requests the user for the date of the reservation.
+        """Requests the user to input the date for the reservation.
 
-        :return: The date entered by the user for the reservation.
+        :return: The reservation date entered by the user.
         :rtype: str
         """
+
         return input("Enter the date of the reservation (dd-mm-yyyy): ")
 
     @staticmethod
     def _request_time() -> str:
-        """
-        Requests the user for the name of the reservation.
+        """Requests the user to input the time for the reservation.
 
-        :return: The time entered by the user for the reservation.
+        :return: The reservation time entered by the user.
         :rtype: str
         """
+
         return input("Enter the time of the reservation (hh:mm, 24h format): ")
 
     @staticmethod
     def _request_people() -> str:
-        """
-        Requests the user for the number of people who will attend the reservation.
+        """Requests the user to input the number of people who will attend 
+        the reservation.
 
-        :return: The number of people who will attend the reservation.
+        :return: The reservation number of people entered by the user.
         :rtype: str
         """
+
         return input("Enter the number of people attending: ")
 
     # Check availability in the database
