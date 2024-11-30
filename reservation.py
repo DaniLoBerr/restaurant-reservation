@@ -542,16 +542,6 @@ class Reservation:
         """
         return "Reservation deleted."
 
-    @staticmethod
-    def get_goodbye_message() -> str:
-        """
-        Gets a message as a goodbye for the ending process of the reservation.
-
-        :return: A goodbye message.
-        :rtype: str
-        """
-        return "Thanks and see you soon!"
-
     # Other methods
     @staticmethod
     def _create_confirmation_document(reservation) -> None:
@@ -659,7 +649,7 @@ def main():
         case "d": Reservation.delete_reservation()
         case "e": pass
         case _: exit("The option entered is not correct")
-    print(Reservation.get_goodbye_message())
+    exit("Thanks and see you soon!")
 
 
 if __name__ == "__main__":
