@@ -638,11 +638,13 @@ class Reservation:
         return list(database_dict.values())
 
 def main():
-    """
-    Main function of the script whose purpose is to ask a user if he/she wants to
-    create, update, get data or delete a restaurant reservation and perfom the
+    """Main function of the script
+    
+    Prompts the user to choose an action: create, update, update, 
+    retrieve or delete a restaurant reservation, and then performs the 
     selected task.
     """
+
     match(
         input(
             "\nWelcome to our restaurant! " +
