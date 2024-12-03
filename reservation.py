@@ -550,15 +550,16 @@ class Reservation:
     # Other methods
     @staticmethod
     def _create_confirmation_document(reservation) -> None:
-        """
-        Generate a pdf with the confirmation and data of the reservation.
+        """Export a pdf with the confirmation and reservation details.
 
-        :param reservation: A reservation object.
+        :param reservation: A reservation object with the 
+        reservation details.
         :type reservation: Reservation
         """
-        # Reservation reminder document object
+
+        # Document object
         pdf = FPDF()
-        # Reservation reminder document title
+        # Document title
         pdf.add_page()
         pdf.set_font("helvetica", "B", 24)
         pdf.cell(
@@ -571,8 +572,10 @@ class Reservation:
             new_y = enums.YPos.NEXT
         )
         # Blank line
-        pdf.cell(0, 10, "", new_x = enums.XPos.LMARGIN, new_y = enums.YPos.NEXT)
-        # Reservation reminder document body
+        pdf.cell(
+            0, 10, "", new_x = enums.XPos.LMARGIN, new_y = enums.YPos.NEXT
+        )
+        # Document body
         pdf.set_font("helvetica", "", 14)
         pdf.multi_cell(
             w = 100,
@@ -581,7 +584,7 @@ class Reservation:
             center = True,
             align = "C"
         )
-        # Export document
+        # Document exportation
         pdf.output("reservation.pdf")
 
     @classmethod
