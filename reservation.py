@@ -440,7 +440,7 @@ class Reservation:
         """
 
         # Retrieve the list of current reservations from the database
-        database_reservations = cls.__get_reservations_list()
+        database_reservations: list = cls.__get_reservations()
         # Check if any reservation already uses the provided name
         for database_reservation in database_reservations:
             if database_reservation["name"] == user_reservation._name:
@@ -464,7 +464,7 @@ class Reservation:
         """
 
         #TODO: refactor this and add comments
-        database_reservations = cls.__get_reservations_list()
+        database_reservations: list = cls.__get_reservations()
         tables_available = cls._restaurant_tables
         for database_reservation in database_reservations:
             if database_reservation["date"] == user_reservation._date.strftime("%Y-%m-%d"):
@@ -600,7 +600,7 @@ class Reservation:
         """
 
         # Load the current reservations from the database
-        reservations_database = cls.__get_reservations_list()
+        reservations_database: list = cls.__get_reservations()
         # Add the new reservation as a dictionary
         reservations_database.append({
             "name": user_reservation._name,
@@ -625,13 +625,14 @@ class Reservation:
             database.write(dumps(numbered_reservations, indent = 4))
 
     @staticmethod
-    def __get_reservations_list() -> list:
-        """
-        Gets a list of all the reservations, in form of dictionaries, stored in the database.
+    def __get_reservations() -> list:
+        """Retrieve all reservations from the JSON file database.
 
-        :return: A list of dictionary reservations.
+        :return: A list of reservations, where each reservation is 
+        represented as a dictionary.
         :rtype: list
         """
+
         with open("reservation_database.json", "r") as database:
             database_dict: dict = load(database)
         return list(database_dict.values())
