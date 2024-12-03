@@ -589,36 +589,40 @@ class Reservation:
 
     @classmethod
     def __update_database(cls, user_reservation: Reservation) -> None:
-        """
-        Updates the database to include a new reservation.
+        """Updates the database to include a new reservation.
 
-        :param user_reservation: A reservation object.
+        The database is stored in a JSON file. The new reservation is added,
+        and the reservations are sorted by date and time before saving.
+
+        :param user_reservation: A reservation object with the details 
+        of the new reservation.
         :type user_reservation: Reservation
         """
-        # Extract a list of the database reservations
-        database_reservations = cls.__get_reservations_list()
-        # Add the new reservation to the list
-        database_reservations.append(dict(
-            name = user_reservation._name,
-            date = user_reservation._date.strftime("%Y-%m-%d"),
-            time = user_reservation._time.strftime("%H:%M"),
-            people = user_reservation._people
-        ))
-        # Sort the reservations list by date
-        sorted_database_reservations = sorted(
-            database_reservations,
-            key = lambda item : item["date"]
+
+        # Load the current reservations from the database
+        reservations_database = cls.__get_reservations_list()
+        # Add the new reservation as a dictionary
+        reservations_database.append({
+            "name": user_reservation._name,
+            "date": user_reservation._date.strftime("%Y-%m-%d"),
+            "time": user_reservation._time.strftime("%H:%M"),
+            "people": user_reservation._people
+        })
+        # Sort reservations by date, then by time
+        sorted_reservations = sorted(
+            reservations_database,
+            key = lambda item : (item["date"], item["time"])
         )
-        # TODO: Sort by time also
-        # Create a new dictionary with the numbered reservations
-        new_database_dict = {}
-        for i, reservation in enumerate(sorted_database_reservations):
-            new_database_dict[f"{i + 1}"] = reservation
-        # Open database and overwrite it with a new database dict
+        # Create a dictionary with numbered reservations
+        numbered_reservations = {
+            str(i + 1): 
+                reservation for i, reservation in enumerate(
+                    sorted_reservations
+                )
+        }
+        # Write the updated reservations back to the JSON file
         with open("reservation_database.json", "w") as database:
-            database.write(dumps(new_database_dict, indent=4))
-        # Export confirmation document
-        cls._create_confirmation_document(user_reservation)
+            database.write(dumps(numbered_reservations, indent = 4))
 
     @staticmethod
     def __get_reservations_list() -> list:
