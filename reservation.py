@@ -347,18 +347,30 @@ class Reservation:
         print(cls._get_confirmation_message())
 
     @classmethod
-    def read_reservation(cls) -> None:
+    def display_reservation(cls) -> None:
+        """Display reservation details for a given name.
+
+        This method prompts the user for a name and creates and object
+        with it and its default values. If there is not a reservation in
+        the database associated with that name, it prints a no
+        reservation message. Otherwise, it gets the details from
+        the reservation, updates the object with them and prints it.
         """
-        ...
-        """
-        # Pedir el nombre al usuario.
-        # Validamos nombre.
-        # Si es inválido, repreguntamos
-        # Crear un objeto con ese nombre.
-        # Comprobar que hay alguna reserva con el nombre de ese objeto
-        # Si no hay reserva, salimos del programa con el mensaje de que no hay reserva
-        # Si existe una reserva con ese nombre, convertimos esas reserva en un objeto y imprimos los datos de ese objeto por pantalla. Cerramos programa
-        ...
+
+        # Get name from user and check if exists in database
+        reservation: Reservation = cls(cls._request_name())
+        if cls._check_name_availability(reservation):
+            print("There is no reservation with that name.")
+        else:
+            # Update object data and print it
+            for database_reservation in cls.__get_reservations():
+                if reservation._name == database_reservation["name"]:
+                    year, month, day = database_reservation["date"].split("-")
+                    reservation._date = f"{day}-{month}-{year}"
+                    reservation._time = database_reservation["time"]
+                    reservation._people = str(database_reservation["people"])
+            print(reservation)
+
 
     @classmethod
     def update_reservation(cls) -> None:
@@ -559,10 +571,10 @@ class Reservation:
         """
 
         return(
-            f"Maximum capacity of the restaurant by time slots: 
-            {cls._restaurant_capacity}, 
-            {cls._restaurant_tables} tables of 
-            {cls._tables_capacity} people each."
+            "Maximum capacity of the restaurant by time slots: "
+            f"{cls._restaurant_capacity}, "
+            f"{cls._restaurant_tables} tables of "
+            f"{cls._tables_capacity} people each."
         )
 
     # Closing messages methods
@@ -705,7 +717,7 @@ def main():
         case "a":
             Reservation.create_reservation()
         case "b":
-            Reservation.read_reservation()
+            Reservation.display_reservation()
         case "c":
             Reservation.update_reservation()
         case "d":
