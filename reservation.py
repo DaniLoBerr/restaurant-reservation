@@ -584,7 +584,7 @@ class Reservation:
 
         return(
             "Time slots for reservations: "
-            ", ".join(t.strftime("%H:%M") for t in cls._reservation_slots)
+            + ", ".join(t.strftime("%H:%M") for t in cls._reservation_slots)
         )
 
     @classmethod
