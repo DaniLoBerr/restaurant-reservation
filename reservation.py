@@ -371,40 +371,66 @@ class Reservation:
                     reservation._people = str(database_reservation["people"])
             print(reservation)
 
-
     @classmethod
     def update_reservation(cls) -> None:
-        """
+        """Update a reservation stored in the database.
+
         ...
         """
-        # Pedir el nombre al usuario.
-        # Validamos nombre.
-        # Si es inválido, repreguntamos
-        # Crear un objeto con ese nombre.
-        # Comprobar que si hay alguna reserva con el nombre de ese objeto
-        # Si ya existe una reserva con ese nombre: obtenemos el diccionaria de la base de datos con ese nombre
-        # Lo convertimos en objeto
-        # Preguntamos por fecha
-        # Validamos fecha.
-        # Si es inválida, repreguntamos.
-        # Comprobar disponibildiad fecha
-        # Si no hay disponibilidad, mandar mensaje y repreguntar por fecha con opción a cancelar.
-        # Si hay disponibilidad, sustituimos la fecha del objeto
-        # Preguntar por hora, mostrando las horas disponibles (comprobar disponibilidad), en formato de elige una opción, con opción a cancelar.
-        # Validar opción que se marque
-        # Si es inválida, repreguntamos
-        # Sustituimos hora al objeto
-        # Comprobar disponibilidad personas.
-        # Enviar al usuario personas y mesas disponibles, con opción a cancelar.
-        # Preguntar por personas.
-        # Validar personas
-        # Si es inválida, repreguntamos
-        # Sustituimos personas al obejto
-        # Con todos los datos, convertir el objeto en diccionario.
-        # Agregarlo en la base de datos.
-        # Enviar mensaje de sustitución.
-        # Enviar pdf con los datos.
-        ...
+
+        # TODO: A lot of refactor.
+
+        # Get name from user and check if exists in database
+        user_reservation: Reservation = cls(cls._request_name())
+        if cls._check_name_availability(user_reservation):
+            print("There is no reservation with that name.")
+        else:
+            # Get list of database reservations
+            database_reservations: list = cls.__get_reservations()
+            # Create a new list without the previous user reservation
+            updated_reservations: list = [
+                reservation for reservation in database_reservations
+                if reservation["name"] is not user_reservation._name
+            ]
+            # Get the data for new reservation
+            user_reservation._date = cls._request_date()
+            print(cls._get_time_constraints())
+            user_reservation._time = cls._request_time()
+            print(cls._get_people_constraints())
+            user_reservation._people = cls._request_people()
+            # Check for availability
+            if not cls._check_reservation_availability(user_reservation):
+                print(
+                    "Sorry, we do not have availability "
+                    "for the data you have provided."
+                )
+            else:
+                # Add updated reservation to the reservations list
+                updated_reservations.append(
+                    {
+                        "name": user_reservation._name,
+                        "date": user_reservation._date.strftime("%Y-%m-%d"),
+                        "time": user_reservation._time.strftime("%H:%M"),
+                        "people": user_reservation._people,
+                    }
+                )
+                # Sort reservations by date, then by time
+                sorted_reservations: list = sorted(
+                    updated_reservations,
+                    key=lambda item: (item["date"], item["time"]),
+                )
+                # Create a dictionary with numbered reservations
+                numbered_reservations: dict = {
+                    str(i + 1): 
+                        reservation for i, reservation
+                        in enumerate(sorted_reservations)
+                }
+                # Write the updated reservations back to the JSON file
+                with open("reservation_database.json", "w") as database:
+                    database.write(dumps(numbered_reservations, indent=4))
+                # Confirmation
+                cls._create_confirmation_document(user_reservation)
+                print(cls._get_confirmation_message())
 
     @classmethod
     def delete_reservation(cls) -> None:
