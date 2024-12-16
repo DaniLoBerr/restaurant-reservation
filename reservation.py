@@ -375,66 +375,19 @@ class Reservation:
     def update_reservation(cls) -> None:
         """Update a reservation stored in the database.
 
-        ...
+        This method calls the cancel_reservation method to remove the
+        reservation details the user wants to update, displays a message
+        to the user to enter the new details and calls the
+        create_reservation method to add the new reservation details
+        to the database.
         """
 
-        # TODO: A lot of refactor.
-
-        # Get name from user and check if exists in database
-        user_reservation: Reservation = cls(cls._request_name())
-        if cls._check_name_availability(user_reservation):
-            print("There is no reservation with that name.")
-        else:
-            # Get list of database reservations
-            database_reservations: list = cls.__get_reservations()
-            # Create a new list without the previous user reservation
-            updated_reservations: list = [
-                reservation for reservation in database_reservations
-                if reservation["name"] is not user_reservation._name
-            ]
-            # Get the data for new reservation
-            print("Please, enter the new reservation details: ")
-            user_reservation._date = cls._request_date()
-            print(cls._get_time_constraints())
-            user_reservation._time = cls._request_time()
-            print(cls._get_people_constraints())
-            user_reservation._people = cls._request_people()
-            # Check for availability
-            if not cls._check_reservation_availability(user_reservation):
-                print(
-                    "Sorry, we do not have availability "
-                    "for the data you have provided."
-                )
-            else:
-                # Add updated reservation to the reservations list
-                updated_reservations.append(
-                    {
-                        "name": user_reservation._name,
-                        "date": user_reservation._date.strftime("%Y-%m-%d"),
-                        "time": user_reservation._time.strftime("%H:%M"),
-                        "people": user_reservation._people,
-                    }
-                )
-                # Sort reservations by date, then by time
-                sorted_reservations: list = sorted(
-                    updated_reservations,
-                    key=lambda item: (item["date"], item["time"]),
-                )
-                # Create a dictionary with numbered reservations
-                numbered_reservations: dict = {
-                    str(i + 1): 
-                        reservation for i, reservation
-                        in enumerate(sorted_reservations)
-                }
-                # Write the updated reservations back to the JSON file
-                with open("reservation_database.json", "w") as database:
-                    database.write(dumps(numbered_reservations, indent=4))
-                # Confirmation
-                cls._create_confirmation_document(user_reservation)
-                print(cls._get_confirmation_message())
+        cls.cancel_reservation()
+        print("Please, enter the new reservation details: ")
+        cls.create_reservation()
 
     @classmethod
-    def delete_reservation(cls) -> None:
+    def cancel_reservation(cls) -> None:
         """
         Remove a reservation stored in the database.
 
@@ -453,7 +406,7 @@ class Reservation:
             # Create a new list without the previous user reservation
             updated_reservations: list = [
                 reservation for reservation in database_reservations
-                if reservation["name"] is not user_reservation._name
+                if reservation["name"] != user_reservation._name
             ]
             # Create a dictionary with numbered reservations
             numbered_reservations: dict = {
@@ -766,12 +719,12 @@ def main():
         case "c":
             Reservation.update_reservation()
         case "d":
-            Reservation.delete_reservation()
+            Reservation.cancel_reservation()
         case "e":
             pass
         case _:
-            exit("The option entered is not correct")
-    exit("Thanks and see you soon!")
+            print("The option entered is not correct")
+    print("Thanks and see you soon!")
 
 
 if __name__ == "__main__":
