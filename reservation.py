@@ -435,18 +435,36 @@ class Reservation:
     @classmethod
     def delete_reservation(cls) -> None:
         """
+        Remove a reservation stored in the database.
+
         ...
         """
-        # Pedir el nombre al usuario.
-        # Validamos nombre.
-        # Si es inválido, repreguntamos
-        # Crear un objeto con ese nombre.
-        # COmprobar que existe un diccionario con ese nombre en la base de datos
-        # Si no existe, salimos del programa con mensaje.
-        # Si existe, eliminamos el diccionario de la base de datos.
-        # Reenumeramos la base de datos.
-        # Salimos del programa con mensaje de confirmación de la eliminación
-        ...
+
+        # TODO: Refactor method
+
+        # Get name from user and check if exists in database
+        user_reservation: Reservation = cls(cls._request_name())
+        if cls._check_name_availability(user_reservation):
+            print("There is no reservation with that name.")
+        else:
+            # Get list of database reservations
+            database_reservations: list = cls.__get_reservations()
+            # Create a new list without the previous user reservation
+            updated_reservations: list = [
+                reservation for reservation in database_reservations
+                if reservation["name"] is not user_reservation._name
+            ]
+            # Create a dictionary with numbered reservations
+            numbered_reservations: dict = {
+                str(i + 1): 
+                    reservation for i, reservation
+                    in enumerate(updated_reservations)
+            }
+            # Write the updated reservations back to the JSON file
+            with open("reservation_database.json", "w") as database:
+                database.write(dumps(numbered_reservations, indent=4))
+            # Confirmation
+            print("Your reservation has been cancelled.")
 
     # Request methods
     @staticmethod
