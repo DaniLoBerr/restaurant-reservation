@@ -393,6 +393,7 @@ class Reservation:
                 if reservation["name"] is not user_reservation._name
             ]
             # Get the data for new reservation
+            print("Please, enter the new reservation details: ")
             user_reservation._date = cls._request_date()
             print(cls._get_time_constraints())
             user_reservation._time = cls._request_time()
