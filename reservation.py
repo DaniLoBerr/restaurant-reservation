@@ -56,6 +56,7 @@ class Reservation:
         time(22, 0),
     ]
 
+
     # Special methods
     def __init__(
             self,
@@ -96,6 +97,7 @@ class Reservation:
             f"for {self._date.strftime("%A, %d %B, %Y")} "
             f"at {self._time.strftime("%I %p")}."
         )
+
 
     # Getters and Setters
     @property
@@ -221,6 +223,7 @@ class Reservation:
                 continue
         self._rpeople: int = validated_people
 
+
     # Validation methods
     @staticmethod
     def _validate_name(name: str) -> str:
@@ -311,6 +314,7 @@ class Reservation:
         reservation_people: str = search(r"^([0-1]?[0-6]|[7-9])$", people)
         return int(reservation_people.group(1))
 
+
     # CRUD reservation methods
     @classmethod
     def create_reservation(cls) -> None:
@@ -344,7 +348,10 @@ class Reservation:
         # Update database and confirmation
         cls.__update_database(reservation)
         cls._create_confirmation_document(reservation)
-        print(cls._get_confirmation_message())
+        print(
+            "Reservation confirmed! You will shortly receive a "
+            "reminder document with the appointment details."
+        )
 
     @classmethod
     def display_reservation(cls) -> None:
@@ -420,6 +427,7 @@ class Reservation:
             # Confirmation
             print("Your reservation has been cancelled.")
 
+
     # Request methods
     @staticmethod
     def _request_name() -> str:
@@ -461,6 +469,7 @@ class Reservation:
         """
 
         return input("Enter the number of people attending: ")
+
 
     # Check availability in the database
     @classmethod
@@ -533,6 +542,7 @@ class Reservation:
             else True
         )
 
+
     # Get contraints methods
     @staticmethod
     def _get_name_constraints() -> str:
@@ -575,31 +585,6 @@ class Reservation:
             f"{cls._tables_capacity} people each."
         )
 
-    # Closing messages methods
-    # TODO: Refactor functionality of this methods
-    @staticmethod
-    def _get_confirmation_message() -> str:
-        """Return a confirmation message for a reservation.
-
-        :return: A string confirming the operation.
-        :rtype: str
-        """
-
-        return(
-            "Reservation confirmed! You will shortly receive a "
-            "reminder document with the appointment details."
-        )
-
-    @staticmethod
-    def _get_delete_message() -> str:
-        """Return a delete confirmation message for a reservation.
-
-        :return: A confirmation message indicating that the
-        reservation was canceled.
-        :rtype: str
-        """
-
-        return "Reservation deleted."
 
     # Other methods
     @staticmethod
