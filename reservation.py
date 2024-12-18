@@ -121,7 +121,7 @@ class Reservation:
 
         while True:
             try:
-                validated_name: str = self._validate_name(name)
+                validated_name: str = validate_name(name)
                 break
             except ValueError:
                 name: str = input(
@@ -152,7 +152,7 @@ class Reservation:
 
         while True:
             try:
-                validated_date: date = self._validate_date(rdate)
+                validated_date: date = validate_date(rdate)
                 break
             except(ValueError, TypeError, AttributeError):
                 rdate: str = input(
@@ -182,7 +182,7 @@ class Reservation:
 
         while True:
             try:
-                validated_time: time = self._validate_time(rtime)
+                validated_time: time = validate_time(self._date, rtime)
                 break
             except(ValueError, TypeError, AttributeError):
                 rtime: str = input(
@@ -212,7 +212,7 @@ class Reservation:
 
         while True:
             try:
-                validated_people: int = self._validate_people(people)
+                validated_people: int = validate_people(people)
                 break
             except AttributeError:
                 people: str = input(
@@ -222,97 +222,6 @@ class Reservation:
                 )
                 continue
         self._rpeople: int = validated_people
-
-
-    # Validation methods
-    @staticmethod
-    def _validate_name(name: str) -> str:
-        """Validate and format the name entered by the user.
-
-        :param name: The user's name in the format "first-name
-        last-name".
-        :type name: str
-        :return: A formated string in the format "First-name Last-name".
-        :rtype: str
-        :raise ValueError: If name isn't in the correct "first-name
-        last-name" format.
-        """
-
-        if matches := search(
-            r"^([a-zñáéíóú]{1,20}) ([a-zñáéíóú]{1,20})$", name, IGNORECASE
-        ):
-            return f"{matches.group(1).title()} {matches.group(2).title()}"
-        else:
-            raise ValueError("Name not valid")
-
-    @staticmethod
-    def _validate_date(rdate: str) -> date:
-        """Convert and validate a date string into a date object.
-
-        :param rdate: The date string in "dd-mm-yyyy" format.
-        :type rdate: str
-        :return: The corresponding date object.
-        :rtype: date
-        :raise ValueError: If rdate is in the past or improperly
-        formatted.
-        :raise TypeError: If a non-numeric value is entered.
-        :raise AttributeError: If rdate isn't in the correct
-        "xx-xx-xxxx" hyphens format.
-        """
-
-        current_date: date = date.today()
-        reservation_date: str = search(r"^(\d{1,2})-(\d{1,2})-(\d{4})$", rdate)
-        validated_date: date = date(
-            year=int(reservation_date.group(3)),
-            month=int(reservation_date.group(2)),
-            day=int(reservation_date.group(1)),
-        )
-        if validated_date < current_date:
-            raise ValueError("The date entered has already passed")
-        else:
-            return validated_date
-
-    def _validate_time(self, rtime: str) -> time:
-        """Convert and validate a time string into a time object.
-
-        :param rtime: The time string in "hh:mm" 24h format.
-        :type rtime: str
-        :return: The corresponding time object.
-        :rtype: time
-        :raise ValueError: If the time is in the past or improperly
-        formatted.
-        :raise TypeError: If a non-numeric value is entered.
-        :raise AttributeError: If rtime isn't in the correct "xx:xx"
-        colon format.
-        """
-
-        current_date: date = datetime.today().date()
-        current_time: time = datetime.today().time()
-        # TODO: Replace hardcode. Use _reservation_slots
-        reservation_time: str = search(r"^(12|14|20|22):(00)$", rtime)
-        validated_time: time = time(
-            hour=int(reservation_time.group(1)),
-            minute=int(reservation_time.group(2)),
-        )
-        if self._date <= current_date and validated_time < current_time:
-            raise ValueError("The date entered has already passed")
-        else:
-            return validated_time
-
-    @staticmethod
-    def _validate_people(people: str) -> int:
-        """Convert and validate a number string into a integer.
-
-        :param people: A number string in "n" format.
-        :type people: str
-        :return: A corresponding integer number.
-        :rtype: int
-        :raise AttributeError: If people's value is anything but a
-        number between 1 and 16, both included.
-        """
-
-        reservation_people: str = search(r"^([0-1]?[0-6]|[7-9])$", people)
-        return int(reservation_people.group(1))
 
 
     # CRUD reservation methods
@@ -390,7 +299,7 @@ class Reservation:
         """
 
         cls.cancel_reservation()
-        print("Please, enter the new reservation details: ")
+        print("Please, enter the new reservation details.")
         cls.create_reservation()
 
     @classmethod
@@ -678,9 +587,9 @@ class Reservation:
 def main():
     """Main function of the script.
 
-    Prompt the user to choose an action: create, update, update,
-    retrieve or delete a restaurant reservation, and then performs the
-    selected task.
+    Prompt the user to choose an action: create, display, update or
+    cancel a restaurant reservation, and then performs the selected
+    task.
     """
 
     match (
@@ -710,6 +619,101 @@ def main():
         case _:
             print("The option entered is not correct")
     print("Thanks and see you soon!")
+
+
+# Validation methods
+def validate_name(name: str) -> str:
+    """Validate and format a name entered by the user.
+
+    :param name: The user's name in the format "first-name
+    last-name".
+    :type name: str
+    :return: A formated string in the format "First-name Last-name".
+    :rtype: str
+    :raise ValueError: If name isn't in the correct "first-name
+    last-name" format.
+    """
+
+    if matches := search(
+        r"^([a-zñáéíóú]{1,20}) ([a-zñáéíóú]{1,20})$", name, IGNORECASE
+    ):
+        return f"{matches.group(1).title()} {matches.group(2).title()}"
+    else:
+        raise ValueError("Name not valid")
+
+
+def validate_date(rdate: str) -> date:
+    """Convert and validate a date string into a date object.
+
+    :param rdate: The date string in "dd-mm-yyyy" format.
+    :type rdate: str
+    :return: The corresponding date object.
+    :rtype: date
+    :raise ValueError: If rdate is in the past or improperly
+    formatted.
+    :raise TypeError: If a non-numeric value is entered.
+    :raise AttributeError: If rdate isn't in the correct
+    "xx-xx-xxxx" hyphens format.
+    """
+
+    current_date: date = date.today()
+    reservation_date: str = search(r"^(\d{1,2})-(\d{1,2})-(\d{4})$", rdate)
+    validated_date: date = date(
+        year=int(reservation_date.group(3)),
+        month=int(reservation_date.group(2)),
+        day=int(reservation_date.group(1)),
+    )
+    if validated_date < current_date:
+        raise ValueError("The date entered has already passed")
+    else:
+        return validated_date
+
+
+def validate_time(rdate: date, rtime: str) -> time:
+    """Convert and validate a time string into a time object.
+
+    :param rtime: The time string in "hh:mm" 24h format.
+    :type rtime: str
+    :return: The corresponding time object.
+    :rtype: time
+    :raise ValueError: If the time is in the past or improperly
+    formatted.
+    :raise TypeError: If a non-numeric value is entered.
+    :raise AttributeError: If rtime isn't in the correct "xx:xx"
+    colon format.
+    """
+
+    current_date: date = datetime.today().date()
+    current_time: time = datetime.today().time()
+    # TODO: Replace hardcode. Use _reservation_slots
+    reservation_time: str = search(r"^(12|14|20|22):(00)$", rtime)
+    validated_time: time = time(
+        hour=int(reservation_time.group(1)),
+        minute=int(reservation_time.group(2)),
+    )
+    if rdate <= current_date and validated_time < current_time:
+        raise ValueError("The date entered has already passed")
+    else:
+        return validated_time
+
+
+def validate_people(people: str) -> int:
+    """Convert and validate a number string into a integer.
+
+    The number must be between 1 and 16, both included, because this
+    method is developed to validate the number of diners that will
+    attend a restaurant reservation.
+
+    :param people: A number string in "n" format.
+    :type people: str
+    :return: A corresponding integer number.
+    :rtype: int
+    :raise AttributeError: If people's value is anything but a
+    number between 1 and 16, both included.
+    """
+
+    reservation_people: str = search(r"^([0-1]?[0-6]|[7-9])$", people)
+    return int(reservation_people.group(1))
 
 
 if __name__ == "__main__":
