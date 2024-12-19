@@ -154,7 +154,7 @@ class Reservation:
             try:
                 validated_date: date = validate_date(rdate)
                 break
-            except(ValueError, TypeError, AttributeError):
+            except(ValueError, AttributeError):
                 rdate: str = input(
                     "Invalid date. "
                     "Please, re-enter the date (dd-mm-yyyy): "
@@ -649,11 +649,10 @@ def validate_date(rdate: str) -> date:
     :type rdate: str
     :return: The corresponding date object.
     :rtype: date
-    :raise ValueError: If rdate is in the past or improperly
-    formatted.
-    :raise TypeError: If a non-numeric value is entered.
-    :raise AttributeError: If rdate isn't in the correct
-    "xx-xx-xxxx" hyphens format.
+    :raise ValueError: If rdate is in the past or contains invalid day,
+    month or year values.
+    :raise AttributeError: If rdate isn't in the correct "dd-mm-yyyy"
+    format.
     """
 
     current_date: date = date.today()
