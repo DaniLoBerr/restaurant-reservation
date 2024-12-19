@@ -184,7 +184,7 @@ class Reservation:
             try:
                 validated_time: time = validate_time(self._date, rtime)
                 break
-            except(ValueError, TypeError, AttributeError):
+            except(ValueError, AttributeError):
                 rtime: str = input(
                     "Invalid time. "
                     "Please, re-enter the time (hh:mm, 24h format): "
@@ -675,11 +675,9 @@ def validate_time(rdate: date, rtime: str) -> time:
     :type rtime: str
     :return: The corresponding time object.
     :rtype: time
-    :raise ValueError: If the time is in the past or improperly
-    formatted.
-    :raise TypeError: If a non-numeric value is entered.
+    :raise ValueError: If the date and time are in the past.
     :raise AttributeError: If rtime isn't in the correct "xx:xx"
-    colon format.
+    colon format or does not match the restaurant allowed time slots.
     """
 
     current_date: date = datetime.today().date()
