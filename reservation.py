@@ -688,8 +688,10 @@ def validate_time(rdate: date, rtime: str) -> time:
         hour=int(reservation_time.group(1)),
         minute=int(reservation_time.group(2)),
     )
-    if rdate <= current_date and validated_time < current_time:
+    if rdate <= current_date:
         raise ValueError("The date entered has already passed")
+    elif rdate <= current_date and validated_time < current_time:
+        raise ValueError("The time entered has already passed")
     else:
         return validated_time
 
