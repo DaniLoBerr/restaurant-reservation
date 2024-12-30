@@ -74,6 +74,5 @@ def test_validate_people():
         validate_people("seventeen")
 
 
-
 if __name__ == "__main__":
     main()

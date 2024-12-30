@@ -19,7 +19,7 @@ program. It is composed of:
     people attending a reservation in a specific format.
 - test_reservation.py: In this file are included the unit tests written
 for the validation methods of the "reservation.py" file.
-- reservation_database.json: This file works as a databse to store
+- reservation_database.json: This file works as a database to store
 reservations.
 - requirements.txt: This file includes the third-party libraries used
 in the program.
